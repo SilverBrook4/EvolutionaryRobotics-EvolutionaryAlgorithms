@@ -13,7 +13,7 @@ p.setGravity(0, 0, -9.8, physicsClient)
 
 # load links
 planeId = p.loadURDF("plane.urdf")
-p.loadSDF("boxs.sdf")
+p.loadSDF("world.sdf")
 
 for i in range(1000):
     print(i)
