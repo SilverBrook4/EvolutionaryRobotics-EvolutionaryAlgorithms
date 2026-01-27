@@ -4,6 +4,9 @@ import pyrosim.pyrosim as pyrosim
 import numpy
 import time
 
+#sets number of steps for simulation
+numSimSteps = 100
+
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
@@ -22,17 +25,22 @@ p.loadSDF("world.sdf")
 pyrosim.Prepare_To_Simulate(robotId)
 
 # initilaze numpy values
-backLegSensorValues = numpy.zeros(100)
+backLegSensorValues = numpy.zeros(numSimSteps)
+frontLegSensorValues = numpy.zeros(numSimSteps)
 
-for i in range(100):
+for i in range(numSimSteps):
     # steps simulation
     p.stepSimulation()
 
     # gets sensor feedback
     backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
+    frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
 
     time.sleep(0.1)
 
 p.disconnect()
+
+# save sensor values
 numpy.save("data//BackLegSensorValues.npy", backLegSensorValues)
+numpy.save("data//FrontLegSensorValues.npy", frontLegSensorValues)
 
