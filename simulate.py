@@ -7,7 +7,7 @@ import math
 import random
 
 #sets number of steps for simulation
-numSimSteps = 1000
+NUMSIMSTEPS = 1000
 
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -27,10 +27,15 @@ p.loadSDF("world.sdf")
 pyrosim.Prepare_To_Simulate(robotId)
 
 # initilaze numpy values
-backLegSensorValues = numpy.zeros(numSimSteps)
-frontLegSensorValues = numpy.zeros(numSimSteps)
+backLegSensorValues = numpy.zeros(NUMSIMSTEPS)
+frontLegSensorValues = numpy.zeros(NUMSIMSTEPS)
 
-for i in range(numSimSteps):
+# intitilize movement array
+targetAngles = numpy.sin(numpy.linspace(0.0, 90.0, NUMSIMSTEPS) * math.pi / 180.0)
+numpy.save("data//TargetAngles.npy", targetAngles)
+exit()
+
+for i in range(NUMSIMSTEPS):
     # steps simulation
     p.stepSimulation()
 
