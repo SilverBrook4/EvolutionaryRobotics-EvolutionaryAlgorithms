@@ -4,6 +4,7 @@ import pyrosim.pyrosim as pyrosim
 import numpy
 import time
 import math
+import random
 
 #sets number of steps for simulation
 numSimSteps = 1000
@@ -40,8 +41,8 @@ for i in range(numSimSteps):
         print("Crash Avoided")
 
     # update motors
-    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = -math.pi/6.0, maxForce = 500)
-    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = math.pi/6.0, maxForce = 500)
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = math.pi/2-(4*random.random()), maxForce = 50)
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = math.pi/2-(4*random.random()), maxForce = 50)
 
     print(i)
     time.sleep(0.1)
