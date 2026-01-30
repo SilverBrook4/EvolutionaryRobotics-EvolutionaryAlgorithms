@@ -35,9 +35,14 @@ for i in range(numSimSteps):
     # gets sensor feedback
     backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
     frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
+    if (frontLegSensorValues[i] == 0.0):
+        print("Crash Avoided")
 
+    # update motors
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = 0.0, maxForce = 500)
+
+    print(i)
     time.sleep(0.1)
-
 p.disconnect()
 
 # save sensor values
