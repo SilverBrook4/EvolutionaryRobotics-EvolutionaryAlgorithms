@@ -3,9 +3,10 @@ import pybullet_data
 import pyrosim.pyrosim as pyrosim
 import numpy
 import time
+import math
 
 #sets number of steps for simulation
-numSimSteps = 100
+numSimSteps = 1000
 
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -39,7 +40,8 @@ for i in range(numSimSteps):
         print("Crash Avoided")
 
     # update motors
-    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = 0.0, maxForce = 500)
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = -math.pi/6.0, maxForce = 500)
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = math.pi/6.0, maxForce = 500)
 
     print(i)
     time.sleep(0.1)
