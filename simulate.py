@@ -6,8 +6,15 @@ import time
 import math
 import random
 
-#sets number of steps for simulation
-NUMSIMSTEPS = 1000
+# initilize variables
+NUMSIMSTEPS = 1000 # sets number of simulation steps
+amplitudeBL = numpy.pi / 6
+frequencyBL = 10
+phaseOffsetBL = 0
+amplitudeFL = numpy.pi / 2
+frequencyFL = 10
+phaseOffsetFL = 0
+
 
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -31,9 +38,11 @@ backLegSensorValues = numpy.zeros(NUMSIMSTEPS)
 frontLegSensorValues = numpy.zeros(NUMSIMSTEPS)
 
 # intitilize movement array
-targetAngles = numpy.sin(numpy.linspace(0.0, 90.0, NUMSIMSTEPS) * math.pi / 180.0)
-numpy.save("data//TargetAngles.npy", targetAngles)
-exit()
+targetAnglesBL = amplitudeBL * numpy.sin(frequencyBL * numpy.linspace(-numpy.pi, numpy.pi, NUMSIMSTEPS) + phaseOffsetBL)
+targetAnglesFL = amplitudeFL * numpy.sin(frequencyFL * numpy.linspace(-numpy.pi, numpy.pi, NUMSIMSTEPS) + phaseOffsetFL)
+#numpy.save("data//TargetAnglesBL.npy", targetAnglesBL)
+#numpy.save("data//TargetAnglesFL.npy", targetAnglesFL)
+#exit()
 
 for i in range(NUMSIMSTEPS):
     # steps simulation
@@ -46,11 +55,11 @@ for i in range(NUMSIMSTEPS):
         print("Crash Avoided")
 
     # update motors
-    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = math.pi/2-(4*random.random()), maxForce = 50)
-    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = math.pi/2-(4*random.random()), maxForce = 50)
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = targetAnglesBL[i], maxForce = 25)
+    pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = targetAnglesFL[i], maxForce = 25)
 
     print(i)
-    time.sleep(0.1)
+    time.sleep(0.01)
 p.disconnect()
 
 # save sensor values

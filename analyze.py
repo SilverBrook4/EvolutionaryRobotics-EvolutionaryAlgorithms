@@ -3,9 +3,11 @@ import matplotlib.pyplot
 
 backLegSensorValues = numpy.load("data//BackLegSensorValues.npy")
 frontLegSensorValues = numpy.load("data//FrontLegSensorValues.npy")
-targetAngles = numpy.load("data//TargetAngles.npy")
+targetAnglesBL = numpy.load("data//TargetAnglesBL.npy")
+targetAnglesFL = numpy.load("data//TargetAnglesFL.npy")
 
-matplotlib.pyplot.plot(targetAngles)
+matplotlib.pyplot.plot(targetAnglesBL)
+matplotlib.pyplot.plot(targetAnglesFL)
 matplotlib.pyplot.show()
 exit()
 matplotlib.pyplot.plot(backLegSensorValues, linewidth=5, label="Back Leg")
