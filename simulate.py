@@ -5,7 +5,10 @@ import numpy
 import time
 import math
 import random
+import constants as c
+from simulation import SIMULATION
 
+'''
 # initilize variables
 NUMSIMSTEPS = 1000 # sets number of simulation steps
 amplitudeBL = numpy.pi / 6
@@ -14,8 +17,9 @@ phaseOffsetBL = 0
 amplitudeFL = numpy.pi / 2
 frequencyFL = 10
 phaseOffsetFL = 0
+'''
 
-
+'''
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
@@ -34,17 +38,17 @@ p.loadSDF("world.sdf")
 pyrosim.Prepare_To_Simulate(robotId)
 
 # initilaze numpy values
-backLegSensorValues = numpy.zeros(NUMSIMSTEPS)
-frontLegSensorValues = numpy.zeros(NUMSIMSTEPS)
+backLegSensorValues = numpy.zeros(c.NUM_SIM_STEPS)
+frontLegSensorValues = numpy.zeros(c.NUM_SIM_STEPS)
 
 # intitilize movement array
-targetAnglesBL = amplitudeBL * numpy.sin(frequencyBL * numpy.linspace(-numpy.pi, numpy.pi, NUMSIMSTEPS) + phaseOffsetBL)
-targetAnglesFL = amplitudeFL * numpy.sin(frequencyFL * numpy.linspace(-numpy.pi, numpy.pi, NUMSIMSTEPS) + phaseOffsetFL)
+targetAnglesBL = c.AMPLITUDE_BL * numpy.sin(c.FREQUENCY_BL * numpy.linspace(-numpy.pi, numpy.pi, c.NUM_SIM_STEPS) + c.PHASE_OFFSET_BL)
+targetAnglesFL = c.AMPLITUDE_FL * numpy.sin(c.FREQUENCY_FL * numpy.linspace(-numpy.pi, numpy.pi, c.NUM_SIM_STEPS) + c.PHASE_OFFSET_FL)
 #numpy.save("data//TargetAnglesBL.npy", targetAnglesBL)
 #numpy.save("data//TargetAnglesFL.npy", targetAnglesFL)
 #exit()
 
-for i in range(NUMSIMSTEPS):
+for i in range(c.NUM_SIM_STEPS):
     # steps simulation
     p.stepSimulation()
 
@@ -59,10 +63,12 @@ for i in range(NUMSIMSTEPS):
     pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = targetAnglesFL[i], maxForce = 25)
 
     print(i)
-    time.sleep(0.01)
+    time.sleep(c.SIM_SLEEP)
 p.disconnect()
 
 # save sensor values
 numpy.save("data//BackLegSensorValues.npy", backLegSensorValues)
 numpy.save("data//FrontLegSensorValues.npy", frontLegSensorValues)
+'''
+simulation = SIMULATION()
 
