@@ -41,6 +41,9 @@ class SIMULATION:
             # step simulation
             print("Simulation Step: " + str(i))
             p.stepSimulation()
+
+            # runs sensors in robots links
+            self.robot.Sense(i)
             
             '''
             # gets sensor feedback
