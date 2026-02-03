@@ -8,6 +8,7 @@ import time
 
 class SIMULATION:
 
+    # class constructor
     def __init__(self):
 
         # connects to physics client 
@@ -26,6 +27,12 @@ class SIMULATION:
         self.world = WORLD()
         self.robot = ROBOT()
 
+    # class destructor
+    def __del__(self):
+
+        p.disconnect()
+
+    # runs the simulation loop and steps simulation
     def Run(self):
 
         # executes simulation loop
