@@ -71,4 +71,5 @@ numpy.save("data//BackLegSensorValues.npy", backLegSensorValues)
 numpy.save("data//FrontLegSensorValues.npy", frontLegSensorValues)
 '''
 simulation = SIMULATION()
+simulation.Run()
 
