@@ -27,10 +27,12 @@ class SIMULATION:
         self.world = WORLD()
         self.robot = ROBOT()
 
+
     # class destructor
     def __del__(self):
 
         p.disconnect()
+
 
     # runs the simulation loop and steps simulation
     def Run(self):
@@ -44,17 +46,9 @@ class SIMULATION:
 
             # runs sensors in robots links
             self.robot.Sense(i)
-            
-            '''
-            # gets sensor feedback
-            backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
-            frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
-            if (frontLegSensorValues[i] == 0.0):
-                print("Crash Avoided")
 
-            # update motors
-            pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_BackLeg', controlMode = p.POSITION_CONTROL, targetPosition = targetAnglesBL[i], maxForce = 25)
-            pyrosim.Set_Motor_For_Joint(bodyIndex = robotId, jointName = b'Torso_FrontLeg', controlMode = p.POSITION_CONTROL, targetPosition = targetAnglesFL[i], maxForce = 25)
-            '''
+            # updates motors for the current step
+            self.robot.Act(i)
 
+            # slows simulation so it can be observed
             time.sleep(c.SIM_SLEEP)

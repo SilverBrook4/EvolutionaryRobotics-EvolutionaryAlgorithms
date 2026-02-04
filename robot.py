@@ -8,8 +8,6 @@ class ROBOT:
     # class constructor
     def __init__(self):
 
-        self.motors = {}
-
         # loads robot from body.urdf
         self.robotId = p.loadURDF("body.urdf")
 
@@ -19,6 +17,10 @@ class ROBOT:
         # prepare sensors for links
         self.Prepare_To_Sense()
 
+        # prepares motors to move
+        self.Prepare_To_Act()
+
+
     # prepares sensors for every link
     def Prepare_To_Sense(self):
 
@@ -26,12 +28,29 @@ class ROBOT:
 
         for linkName in pyrosim.linkNamesToIndices:
 
-            print(linkName)
             self.sensors[linkName] = SENSOR(linkName)
+
 
     # get and store sensor data for robot object
     def Sense(self, i):
 
         for sensor in self.sensors.values():
+
             sensor.Get_Value(i)
 
+
+    # prepare motors at each joint
+    def Prepare_To_Act(self):
+
+        self.motors = {}
+
+        for jointName in pyrosim.jointNamesToIndices:
+
+            self.motors[jointName] = MOTOR(jointName)
+
+    # updates each motor
+    def Act(self, i):
+
+        for motor in self.motors.values():
+
+            motor.Set_Value(i, self.robotId)
