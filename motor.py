@@ -19,6 +19,8 @@ class MOTOR:
         # create values to modify motor oscilation
         self.amplitude = c.AMPLITUDE
         self.frequency = c.FREQUENCY
+        if self.jointName == b'Torso_BackLeg':
+            self.frequency = c.FREQUENCY / 2
         self.offset = c.PHASE_OFFSET
 
         # sets the oscilation wave for the motor
