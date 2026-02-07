@@ -56,9 +56,16 @@ class ROBOT:
     # updates each motor
     def Act(self, i):
 
-        for motor in self.motors.values():
+        for neuronName in self.nn.Get_Neuron_Names():
 
-            motor.Set_Value(i, self.robotId)
+            if self.nn.Is_Motor_Neuron(neuronName):
+
+                # gets motor neurons output value and correct motor
+                jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
+                desiredAngle = self.nn.Get_Value_Of(neuronName)
+
+                # updates motor neurons
+                self.motors[jointName.encode()].Set_Value(desiredAngle, self.robotId)
 
 
     # activates neural network to interpret sensor input and update robot
