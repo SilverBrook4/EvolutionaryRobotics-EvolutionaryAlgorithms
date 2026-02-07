@@ -47,6 +47,9 @@ class SIMULATION:
             # runs sensors in robots links
             self.robot.Sense(i)
 
+            # tells the robot to interpret sensor input with its neural network
+            self.robot.Think()
+
             # updates motors for the current step
             self.robot.Act(i)
 

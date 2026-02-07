@@ -1,8 +1,11 @@
 import pyrosim.pyrosim as pyrosim
 
-# define cration functions
 
+# define creation functions
+
+# Creates world
 def Create_World():
+
     pyrosim.Start_SDF("world.sdf")
 
     length = 1
@@ -17,7 +20,10 @@ def Create_World():
 
     pyrosim.End()
 
-def Create_Robot():
+
+# creates the robots body
+def Generate_Body():
+
     pyrosim.Start_URDF("body.urdf")
 
     # create Torso
@@ -62,6 +68,17 @@ def Create_Robot():
     pyrosim.End()
 
 
+# creates the robots neural network
+def Generate_Brain():
+    pyrosim.Start_NeuralNetwork("brain.nndf")
+
+    pyrosim.Send_Sensor_Neuron(name = 0, linkName = "Torso")
+
+    pyrosim.End()
+
+
 # run generate code
-Create_World()
-Create_Robot()
+if __name__ == "__main__":
+    Create_World()
+    Generate_Body()
+    Generate_Brain()
