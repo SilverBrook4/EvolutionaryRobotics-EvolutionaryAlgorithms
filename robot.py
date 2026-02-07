@@ -64,4 +64,6 @@ class ROBOT:
     # activates neural network to interpret sensor input and update robot
     def Think(self):
 
+        self.nn.Update()
+
         self.nn.Print()
