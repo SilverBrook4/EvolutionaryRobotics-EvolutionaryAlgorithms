@@ -3,7 +3,7 @@ import numpy
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 1000 # sets number of simulation steps
+NUM_SIM_STEPS = 500 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 

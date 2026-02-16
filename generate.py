@@ -1,4 +1,5 @@
 import pyrosim.pyrosim as pyrosim
+import random
 
 
 # define creation functions
@@ -72,7 +73,23 @@ def Generate_Body():
 def Generate_Brain():
     pyrosim.Start_NeuralNetwork("brain.nndf")
 
+    # adds sensor neurons to neural network file
     pyrosim.Send_Sensor_Neuron(name = 0, linkName = "Torso")
+    pyrosim.Send_Sensor_Neuron(name = 1, linkName = "BackLeg")
+    pyrosim.Send_Sensor_Neuron(name = 2, linkName = "FrontLeg")
+
+    # adds motor neurons to neural network file
+    pyrosim.Send_Motor_Neuron(name = 3, jointName = "Torso_BackLeg")
+    pyrosim.Send_Motor_Neuron(name = 4, jointName = "Torso_FrontLeg")
+
+    # adds synapses
+    for sensor in range(1, 3):
+
+        for motor in range(3, 5):
+
+            weight = 1 - (random.random() * 2)
+            pyrosim.Send_Synapse(sourceNeuronName = sensor, targetNeuronName = motor, weight = weight)
+
 
     pyrosim.End()
 
