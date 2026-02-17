@@ -12,7 +12,7 @@ class SIMULATION:
     def __init__(self):
 
         # connects to physics client 
-        self.physicsClient = p.connect(p.GUI)
+        self.physicsClient = p.connect(p.DIRECT)
 
         # sets physics client search path
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -41,7 +41,9 @@ class SIMULATION:
         for i in range(c.NUM_SIM_STEPS):
 
             # step simulation
-            print("Simulation Step: " + str(i))
+            if (c.SHOW_NN_UPDATES):
+                print("Simulation Step: " + str(i))
+
             p.stepSimulation()
 
             # runs sensors in robots links
@@ -55,3 +57,9 @@ class SIMULATION:
 
             # slows simulation so it can be observed
             time.sleep(c.SIM_SLEEP)
+
+
+    # evaluates the fitness of a specific robot
+    def Get_Fitness(self):
+
+        self.robot.Get_Fitness()

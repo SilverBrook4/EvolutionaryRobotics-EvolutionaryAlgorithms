@@ -3,6 +3,7 @@ import pyrosim.pyrosim as pyrosim
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 from sensor import SENSOR
 from motor import MOTOR
+import constants as c
 
 class ROBOT:
 
@@ -73,4 +74,21 @@ class ROBOT:
 
         self.nn.Update()
 
-        self.nn.Print()
+        if (c.SHOW_NN_UPDATES):
+            self.nn.Print()
+
+
+    # gets the fitness of the robot
+    def Get_Fitness(self):
+
+        stateOfLinkZero = p.getLinkState(self.robotId, 0)
+
+        positionOfLinkZero = stateOfLinkZero[0]
+
+        xCoordinateOfLinkZero = positionOfLinkZero[0]
+
+        with open("data//fitness.txt", "w") as f:
+
+            f.write(str(xCoordinateOfLinkZero))
+
+            f.close()
