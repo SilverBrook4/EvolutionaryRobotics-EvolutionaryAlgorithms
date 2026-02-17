@@ -83,6 +83,8 @@ class NEURON:
 
                 self.Allow_Presynaptic_Neuron_To_Influence_Me(weight, presynapticNeuron)
 
+        self.Threshold()
+
     def Allow_Presynaptic_Neuron_To_Influence_Me(self, weight, presynapticNeuron):
 
         self.Add_To_Value(weight * presynapticNeuron)

@@ -5,6 +5,8 @@ import numpy
 # Set Evolution Values
 NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
 
+POPULATION_SIZE = 2 # number of nn's in a population
+
 #----------------------------------------------------
 
 # Set Simulation Values

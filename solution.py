@@ -109,7 +109,7 @@ class SOLUTION:
         self.Create_Brain()
 
         # runs the simulation
-        os.system(f"python3 simulate.py {directOrGUI}")
+        os.system(f"python3 simulate.py {directOrGUI} &")
 
         # read in fitness value for iteration
         with open("data//fitness.txt", "r") as f:
