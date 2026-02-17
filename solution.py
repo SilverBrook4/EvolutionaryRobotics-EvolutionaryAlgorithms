@@ -101,7 +101,7 @@ class SOLUTION:
 
 
     # evaluates the qualety of given solution
-    def Evaluate(self):
+    def Evaluate(self, directOrGUI):
 
         # creates the files for the world, robot, and robots brain to run in the physics engine
         self.Create_World()
@@ -109,7 +109,7 @@ class SOLUTION:
         self.Create_Brain()
 
         # runs the simulation
-        os.system("python3 simulate.py")
+        os.system(f"python3 simulate.py {directOrGUI}")
 
         # read in fitness value for iteration
         with open("data//fitness.txt", "r") as f:

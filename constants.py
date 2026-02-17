@@ -8,9 +8,9 @@ NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 100 # sets number of simulation steps
+NUM_SIM_STEPS = 1000 # sets number of simulation steps
 
-SIM_SLEEP = 0 # time simulation sleeps use 0.01 to watch
+SIM_SLEEP = 0.01 # time simulation sleeps
 
 PYBULLET_DEBUGGER = False # Turns pybuller debugger on and off
 

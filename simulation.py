@@ -9,10 +9,15 @@ import time
 class SIMULATION:
 
     # class constructor
-    def __init__(self):
+    def __init__(self, directOrGUI):
 
-        # connects to physics client 
-        self.physicsClient = p.connect(p.DIRECT)
+        # connects to physics client
+        if (directOrGUI == "DIRECT"):
+            self.physicsClient = p.connect(p.DIRECT)
+            self.shouldSleep = False
+        else:
+            self.physicsClient = p.connect(p.GUI)
+            self.shouldSleep = True
 
         # sets physics client search path
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -56,7 +61,8 @@ class SIMULATION:
             self.robot.Act(i)
 
             # slows simulation so it can be observed
-            time.sleep(c.SIM_SLEEP)
+            if (self.shouldSleep):
+                time.sleep(c.SIM_SLEEP)
 
 
     # evaluates the fitness of a specific robot
