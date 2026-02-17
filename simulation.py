@@ -9,7 +9,7 @@ import time
 class SIMULATION:
 
     # class constructor
-    def __init__(self, directOrGUI):
+    def __init__(self, directOrGUI, solutionID):
 
         # connects to physics client
         if (directOrGUI == "DIRECT"):
@@ -30,7 +30,7 @@ class SIMULATION:
         p.setGravity(0, 0, -9.8, self.physicsClient)
 
         self.world = WORLD()
-        self.robot = ROBOT()
+        self.robot = ROBOT(solutionID)
 
 
     # class destructor

@@ -6,9 +6,17 @@ import os
 
 class SOLUTION:
 
-    def __init__(self):
+    def __init__(self, myID):
 
         self.weights = 1 - (np.random.rand(3, 2) * 2)
+
+        self.myID = myID
+
+
+    # sets ID for child solutions
+    def Set_ID(self, myID):
+
+        self.myID = myID
 
 
     # Creates world
@@ -78,7 +86,7 @@ class SOLUTION:
 
     # creates the robots neural network
     def Create_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+        pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
 
         # adds sensor neurons to neural network file
         pyrosim.Send_Sensor_Neuron(name = 0, linkName = "Torso")
@@ -109,7 +117,7 @@ class SOLUTION:
         self.Create_Brain()
 
         # runs the simulation
-        os.system(f"python3 simulate.py {directOrGUI} &")
+        os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
 
         # read in fitness value for iteration
         with open("data//fitness.txt", "r") as f:

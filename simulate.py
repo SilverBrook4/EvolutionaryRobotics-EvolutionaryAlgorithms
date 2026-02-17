@@ -4,7 +4,8 @@ import sys
 if __name__ == ("__main__"):
 
     directOrGUI = sys.argv[1]
-    simulation = SIMULATION(directOrGUI)
+    solutionID = sys.argv[2]
+    simulation = SIMULATION(directOrGUI, solutionID)
 
     simulation.Run()
 

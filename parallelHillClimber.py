@@ -9,12 +9,15 @@ class PARALLEL_HILL_CLIMBER:
 
         self.parents = {}
 
+        self.nextAvailableID = 0
+
+
         # creates a population of parents
         for parent in range(c.POPULATION_SIZE):
 
-            self.parents[parent] = SOLUTION()
+            self.parents[parent] = SOLUTION(self.nextAvailableID)
+            self.nextAvailableID = self.nextAvailableID + 1
 
-        print(self.parents)
 
     def Evolve(self):
 
@@ -23,8 +26,6 @@ class PARALLEL_HILL_CLIMBER:
             self.parents[parent].Evaluate("GUI")
 
         '''
-        self.parent.Evaluate("GUI")
-
         for currentGeneration in range(c.NUMBER_OF_GENERATIONS):
 
             self.Evolve_For_One_Generation("DIRECT")
@@ -43,6 +44,9 @@ class PARALLEL_HILL_CLIMBER:
     def Spawn(self):
 
         self.child = copy.deepcopy(self.parent)
+
+        self.child.Set_ID(self.nextAvailableID)
+        self.nextAvailableID = self.nextAvailableID + 1
 
 
     def Mutate(self):

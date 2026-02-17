@@ -4,17 +4,18 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 from sensor import SENSOR
 from motor import MOTOR
 import constants as c
+import os
 
 class ROBOT:
 
     # class constructor
-    def __init__(self):
+    def __init__(self, solutionID):
 
         # loads robot from body.urdf
         self.robotId = p.loadURDF("body.urdf")
 
         # load neural network from brain.nndf
-        self.nn = NEURAL_NETWORK("brain.nndf")
+        self.nn = NEURAL_NETWORK(f"brain{solutionID}.nndf")
 
         # prepares to simulate robot
         pyrosim.Prepare_To_Simulate(self.robotId)
@@ -24,6 +25,9 @@ class ROBOT:
 
         # prepares motors to move
         self.Prepare_To_Act()
+
+        # cleans up brain files
+        os.system(f"rm brain{solutionID}.nndf")
 
 
     # prepares sensors for every link
