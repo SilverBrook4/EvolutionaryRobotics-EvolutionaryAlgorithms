@@ -16,7 +16,9 @@ SIM_SLEEP = 0.01 # time simulation sleeps
 
 PYBULLET_DEBUGGER = False # Turns pybuller debugger on and off
 
-SHOW_NN_UPDATES = False
+SHOW_NN_UPDATES = False # shows updates to neural network weights across steps
+
+SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra messages
 
 #----------------------------------------------------
 
@@ -26,12 +28,3 @@ AMPLITUDE = numpy.pi / 4
 FREQUENCY = 10
 
 PHASE_OFFSET = 0
-
-#----------------------------------------------------
-
-# Sewt Front Leg Values
-AMPLITUDE_FL = numpy.pi / 2
-
-FREQUENCY_FL = 10
-
-PHASE_OFFSET_FL = 0

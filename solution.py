@@ -1,5 +1,6 @@
 import pyrosim.pyrosim as pyrosim
 import numpy as np
+import constants as c
 import random
 import os
 import time
@@ -118,7 +119,14 @@ class SOLUTION:
         self.Create_Brain()
 
         # runs the simulation
-        os.system(f"python3 simulate.py {directOrGUI} {self.myID} 2&>1 &")
+        if (c.SUPPRESS_PYBULLET_MESSAGES):
+
+            os.system(f"python3 simulate.py {directOrGUI} {self.myID} 2&>1 &")
+
+        else:
+
+            os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
+
 
 
     # reads in fitness value
