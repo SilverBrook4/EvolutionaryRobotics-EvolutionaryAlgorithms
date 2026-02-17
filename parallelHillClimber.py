@@ -25,6 +25,7 @@ class PARALLEL_HILL_CLIMBER:
             self.nextAvailableID = self.nextAvailableID + 1
 
 
+    # carrys out evolution of neural networks across generations
     def Evolve(self):
 
         # start parent simulations
@@ -37,35 +38,44 @@ class PARALLEL_HILL_CLIMBER:
 
             self.parents[parent].Wait_For_Simulation_To_End()
 
+        # evolves each generation
         for currentGeneration in range(c.NUMBER_OF_GENERATIONS):
 
             self.Evolve_For_One_Generation("DIRECT")
 
 
+    # evolves one generation of neural networks
     def Evolve_For_One_Generation(self, directOrGUI):
 
         pass
 
-        '''
         self.Spawn()
         self.Mutate()
+        '''
         self.child.Evaluate(directOrGUI)
         self.Print()
         self.Select()
         '''
 
 
+    # spawns children from parent
     def Spawn(self):
 
-        self.child = copy.deepcopy(self.parent)
+        self.children = {}
 
-        self.child.Set_ID(self.nextAvailableID)
-        self.nextAvailableID = self.nextAvailableID + 1
+        for child in range(c.POPULATION_SIZE):
+
+            self.children[child] = copy.deepcopy(self.parents[child])
+            self.children[child].Set_ID(self.nextAvailableID)
+            self.nextAvailableID = self.nextAvailableID + 1
 
 
+    # mutates children to facilitate evolution
     def Mutate(self):
 
-        self.child.Mutate()
+        for child in self.children:
+
+            self.children[child].Mutate()
 
 
     def Select(self):
