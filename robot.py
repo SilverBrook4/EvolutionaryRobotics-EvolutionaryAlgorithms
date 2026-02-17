@@ -15,7 +15,8 @@ class ROBOT:
         self.robotId = p.loadURDF("body.urdf")
 
         # load neural network from brain.nndf
-        self.nn = NEURAL_NETWORK(f"brain{solutionID}.nndf")
+        self.myID = solutionID
+        self.nn = NEURAL_NETWORK(f"brain{self.myID}.nndf")
 
         # prepares to simulate robot
         pyrosim.Prepare_To_Simulate(self.robotId)
@@ -27,7 +28,7 @@ class ROBOT:
         self.Prepare_To_Act()
 
         # cleans up brain files
-        os.system(f"rm brain{solutionID}.nndf")
+        os.system(f"rm brain{self.myID}.nndf")
 
 
     # prepares sensors for every link
@@ -85,14 +86,19 @@ class ROBOT:
     # gets the fitness of the robot
     def Get_Fitness(self):
 
+        # gets the x position or fitness of the robot
         stateOfLinkZero = p.getLinkState(self.robotId, 0)
 
         positionOfLinkZero = stateOfLinkZero[0]
 
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
-        with open("data//fitness.txt", "w") as f:
+        # writes fitness to a temporary file
+        with open(f"data//tmp{self.myID}.txt", "w") as f:
 
             f.write(str(xCoordinateOfLinkZero))
 
             f.close()
+
+        # copys the fitness value to the fitness file
+        os.system(f"mv data//tmp{self.myID}.txt data//fitness{self.myID}.txt")

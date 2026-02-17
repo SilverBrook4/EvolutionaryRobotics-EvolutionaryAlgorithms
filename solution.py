@@ -2,6 +2,7 @@ import pyrosim.pyrosim as pyrosim
 import numpy as np
 import random
 import os
+import time
 
 
 class SOLUTION:
@@ -108,8 +109,8 @@ class SOLUTION:
         pyrosim.End()
 
 
-    # evaluates the qualety of given solution
-    def Evaluate(self, directOrGUI):
+    # staerts simulation
+    def Start_Simulation(self, directOrGUI):
 
         # creates the files for the world, robot, and robots brain to run in the physics engine
         self.Create_World()
@@ -119,12 +120,24 @@ class SOLUTION:
         # runs the simulation
         os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
 
+
+    # reads in fitness value
+    def Wait_For_Simulation_To_End(self):
+
+        # checks that fitness file exists before opening
+        while not os.path.exists(f"data//fitness{self.myID}.txt"):
+
+            time.sleep(0.01)
+
         # read in fitness value for iteration
-        with open("data//fitness.txt", "r") as f:
+        with open(f"data//fitness{self.myID}.txt", "r") as f:
 
             self.fitness = float(f.read())
 
             f.close()
+
+        # cleans up fitness file
+        os.system(f"rm data//fitness{self.myID}.txt")
 
 
     def Mutate(self):
