@@ -118,7 +118,7 @@ class SOLUTION:
         self.Create_Brain()
 
         # runs the simulation
-        os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
+        os.system(f"python3 simulate.py {directOrGUI} {self.myID} 2&>1 &")
 
 
     # reads in fitness value
