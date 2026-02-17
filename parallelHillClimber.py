@@ -28,15 +28,8 @@ class PARALLEL_HILL_CLIMBER:
     # carrys out evolution of neural networks across generations
     def Evolve(self):
 
-        # start parent simulations
-        for parent in self.parents:
-
-            self.parents[parent].Start_Simulation("DIRECT")
-
-        # end parent simulations
-        for parent in self.parents:
-
-            self.parents[parent].Wait_For_Simulation_To_End()
+        # evaluate parents
+        self.Evaluate(self.parents)
 
         # evolves each generation
         for currentGeneration in range(c.NUMBER_OF_GENERATIONS):
@@ -51,11 +44,9 @@ class PARALLEL_HILL_CLIMBER:
 
         self.Spawn()
         self.Mutate()
-        '''
-        self.child.Evaluate(directOrGUI)
+        self.Evaluate(self.children)
         self.Print()
         self.Select()
-        '''
 
 
     # spawns children from parent
@@ -78,17 +69,52 @@ class PARALLEL_HILL_CLIMBER:
             self.children[child].Mutate()
 
 
+    # evaluates passed in solutions 
+    def Evaluate(self, solutions):
+
+        # starts simulation of solutions
+        for solution in solutions:
+
+            solutions[solution].Start_Simulation("DIRECT")
+
+        # end parent simulations
+        for solution in solutions:
+
+            solutions[solution].Wait_For_Simulation_To_End()
+
+
+    # selects most fit parent or child
     def Select(self):
 
-        if (self.parent.fitness > self.child.fitness):
+        for key in range(c.POPULATION_SIZE):
 
-            self.parent = copy.deepcopy(self.child)
+            if (self.parents[key].fitness > self.children[key].fitness):
 
+                self.parents[key] = copy.deepcopy(self.children[key])
+
+
+    # prints parent and childs fitness
     def Print(self):
-        print(f"Parent Fitness: {self.parent.fitness} Child Fitness: {self.child.fitness}")
 
+        print("\n")
+
+        for key in range(c.POPULATION_SIZE):
+
+            print(f"Parent Fitness: {self.parents[key].fitness} || Child Fitness: {self.children[key].fitness}")
+
+        print("\n")
+
+
+    # replays best solution in GUI to see improvment from training
     def Show_Best(self):
 
-        pass
+        bestSolution = 0
 
-        #self.parent.Evaluate("GUI")
+        for solution in range(1, c.POPULATION_SIZE):
+
+            if (self.parents[bestSolution].fitness > self.parents[solution].fitness):
+
+                bestSolution = solution
+
+        print(f"Best Fitness Found: {self.parents[bestSolution].fitness}")
+        self.parents[bestSolution].Start_Simulation("GUI")
