@@ -23,9 +23,9 @@ SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra 
 #----------------------------------------------------
 
 # Sets Neural Network Values
-NUM_SENSOR_NEURONS = 5 # number of sensor neurons
+NUM_SENSOR_NEURONS = 9 # number of sensor neurons
 
-NUM_MOTOR_NEURONS = 4 # number of motor neurons
+NUM_MOTOR_NEURONS = 8 # number of motor neurons
 
 #----------------------------------------------------
 
