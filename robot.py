@@ -68,7 +68,7 @@ class ROBOT:
 
                 # gets motor neurons output value and correct motor
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
-                desiredAngle = self.nn.Get_Value_Of(neuronName)
+                desiredAngle = self.nn.Get_Value_Of(neuronName) * c.MOTOR_JOINT_RANGE
 
                 # updates motor neurons
                 self.motors[jointName.encode()].Set_Value(desiredAngle, self.robotId)

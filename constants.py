@@ -3,9 +3,9 @@ import numpy
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 2 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
 
-POPULATION_SIZE = 2 # number of nn's in a population
+POPULATION_SIZE = 10 # number of nn's in a population
 
 #----------------------------------------------------
 
@@ -23,7 +23,7 @@ SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra 
 #----------------------------------------------------
 
 # Sets Neural Network Values
-NUM_SENSOR_NEURONS = 9 # number of sensor neurons
+NUM_SENSOR_NEURONS = 5 # number of sensor neurons
 
 NUM_MOTOR_NEURONS = 8 # number of motor neurons
 
@@ -35,3 +35,5 @@ AMPLITUDE = numpy.pi / 4
 FREQUENCY = 10
 
 PHASE_OFFSET = 0
+
+MOTOR_JOINT_RANGE = 0.7
