@@ -56,7 +56,7 @@ class SOLUTION:
         pyrosim.Send_Cube(name="Torso", pos=[x, y, z], size=[length, width, height])
 
         # joint Torso and BackLeg
-        pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0,-0.5,1])
+        pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0,-0.5,1], jointAxis="0 1 0")
 
         # create BackLeg
         length = 0.2
@@ -70,7 +70,7 @@ class SOLUTION:
         pyrosim.Send_Cube(name="BackLeg", pos=[x, y, z], size=[length, width, height])
 
         # joint Torso FrontLeg
-        pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg", type="revolute", position=[0,0.5,1])
+        pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg", type="revolute", position=[0,0.5,1], jointAxis="0 1 0")
 
         # create FrontLeg
         length = 0.2
