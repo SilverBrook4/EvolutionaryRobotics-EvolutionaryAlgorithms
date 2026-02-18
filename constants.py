@@ -3,9 +3,9 @@ import numpy
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 2 # the number of generations that will be evolved
 
-POPULATION_SIZE = 10 # number of nn's in a population
+POPULATION_SIZE = 2 # number of nn's in a population
 
 #----------------------------------------------------
 
@@ -19,6 +19,13 @@ PYBULLET_DEBUGGER = False # Turns pybuller debugger on and off
 SHOW_NN_UPDATES = False # shows updates to neural network weights across steps
 
 SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra messages
+
+#----------------------------------------------------
+
+# Sets Neural Network Values
+NUM_SENSOR_NEURONS = 3 # number of sensor neurons
+
+NUM_MOTOR_NEURONS = 2 # number of motor neurons
 
 #----------------------------------------------------
 
