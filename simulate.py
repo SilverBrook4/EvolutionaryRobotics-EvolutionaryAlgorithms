@@ -10,4 +10,3 @@ if __name__ == ("__main__"):
     simulation.Run()
 
     simulation.Get_Fitness()
-

@@ -236,6 +236,7 @@ class SOLUTION:
     def Wait_For_Simulation_To_End(self):
 
         # checks that fitness file exists before opening
+        print(f"searching for data//tmp{self.myID}.txt")
         while not os.path.exists(f"data//fitness{self.myID}.txt"):
 
             time.sleep(0.01)

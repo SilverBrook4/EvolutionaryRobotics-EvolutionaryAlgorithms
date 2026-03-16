@@ -93,12 +93,12 @@ class ROBOT:
 
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
-        # writes fitness to a temporary file
-        with open(f"data//tmp{self.myID}.txt", "w") as f:
+        while not os.path.exists(f"data//tmp{self.myID}.txt"):
+            # writes fitness to a temporary file
+            with open(f"data//tmp{self.myID}.txt", "w") as f:
 
-            f.write(str(xCoordinateOfLinkZero))
-
-            f.close()
+                f.write(str(xCoordinateOfLinkZero))
+                f.close()
 
         # copys the fitness value to the fitness file
         os.system(f"mv data//tmp{self.myID}.txt data//fitness{self.myID}.txt")

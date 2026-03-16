@@ -10,8 +10,8 @@ class PARALLEL_HILL_CLIMBER:
 
         # cleans up any files leftover from a crash
         os.system("rm brain*.nndf")
-        os.system("rm data//fitness*.nndf")
-        os.system("rm data//tmp*.nndf")
+        os.system("rm data//fitness*.txt")
+        os.system("rm data//tmp*.txt")
 
         self.parents = {}
 
@@ -39,8 +39,6 @@ class PARALLEL_HILL_CLIMBER:
 
     # evolves one generation of neural networks
     def Evolve_For_One_Generation(self, directOrGUI):
-
-        pass
 
         self.Spawn()
         self.Mutate()
