@@ -84,7 +84,7 @@ class ROBOT:
 
 
     # gets the fitness of the robot
-    def Get_Fitness(self):
+    def Get_Fitness(self, writePipe):
 
         # gets the x position or fitness of the robot
         stateOfLinkZero = p.getLinkState(self.robotId, 0)
@@ -93,6 +93,10 @@ class ROBOT:
 
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
+        os.write(writePipe, str(xCoordinateOfLinkZero).encode("utf-8"))
+        os.close(writePipe)
+
+        '''
         while not os.path.exists(f"data//tmp{self.myID}.txt"):
             # writes fitness to a temporary file
             with open(f"data//tmp{self.myID}.txt", "w") as f:
@@ -102,3 +106,4 @@ class ROBOT:
 
         # copys the fitness value to the fitness file
         os.system(f"mv data//tmp{self.myID}.txt data//fitness{self.myID}.txt")
+        '''

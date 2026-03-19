@@ -3,9 +3,9 @@ import numpy
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 3 # the number of generations that will be evolved
 
-POPULATION_SIZE = 17 # number of nn's in a population
+POPULATION_SIZE = 3 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values

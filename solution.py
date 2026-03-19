@@ -4,6 +4,7 @@ import constants as c
 import random
 import os
 import time
+import subprocess
 
 
 class SOLUTION:
@@ -13,6 +14,8 @@ class SOLUTION:
         self.weights = 1 - (np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_MOTOR_NEURONS) * 2)
 
         self.myID = myID
+
+        self.readPipe, self.writePipe = os.pipe()
 
 
     # sets ID for child solutions
@@ -224,20 +227,31 @@ class SOLUTION:
         # runs the simulation
         if (c.SUPPRESS_PYBULLET_MESSAGES):
 
-            os.system(f"python3 simulate.py {directOrGUI} {self.myID} 2&>1 &")
+            subprocess.Popen(["python3", "simulate.py", directOrGUI, str(self.myID), str(self.writePipe)],
+                             pass_fds=(self.writePipe,),
+                             stderr=subprocess.DEVNULL,
+                             stdout=subprocess.DEVNULL)
+            # os.system(f"python3 simulate.py {directOrGUI} {self.myID} {str(self.writePipe)} 2&>1 &")
 
         else:
 
-            os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
+            subprocess.Popen(["python3", "simulate.py", directOrGUI, str(self.myID), str(self.writePipe)],
+                             pass_fds=(self.writePipe,))
+            # os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
 
 
 
     # reads in fitness value
     def Wait_For_Simulation_To_End(self):
 
+        os.close(self.writePipe)
+        self.fitness = float(os.read(self.readPipe, 100))
+        os.close(self.readPipe)
+
+        '''
         # checks that fitness file exists before opening
         print(f"searching for data//tmp{self.myID}.txt")
-        while not os.path.exists(f"data//fitness{self.myID}.txt"):
+        while not os.path.exists(f"data//fitness{self.myID}.txt")
 
             time.sleep(0.01)
 
@@ -250,6 +264,7 @@ class SOLUTION:
 
         # cleans up fitness file
         os.system(f"rm data//fitness{self.myID}.txt")
+        '''
 
 
     def Mutate(self):
