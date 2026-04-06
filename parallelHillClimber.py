@@ -54,9 +54,15 @@ class PARALLEL_HILL_CLIMBER:
 
         for child in range(c.POPULATION_SIZE):
 
+            # clear subprocess date
+            self.parents[child].process = None
+            self.parents[child].parent_connection = None
+            self.parents[child].child_connection = None
+
             self.children[child] = copy.deepcopy(self.parents[child])
             self.children[child].Set_ID(self.nextAvailableID)
             self.nextAvailableID = self.nextAvailableID + 1
+            self.children[child].Set_Pipes()
 
 
     # mutates children to facilitate evolution
@@ -88,6 +94,11 @@ class PARALLEL_HILL_CLIMBER:
 
             if (self.parents[key].fitness > self.children[key].fitness):
 
+                self.children[key].process = None
+                self.children[key].parent_connection = None
+                self.children[key].child_connection = None
+
+                # makes deep copy
                 self.parents[key] = copy.deepcopy(self.children[key])
 
 

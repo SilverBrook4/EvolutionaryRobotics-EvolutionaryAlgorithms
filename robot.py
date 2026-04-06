@@ -84,7 +84,7 @@ class ROBOT:
 
 
     # gets the fitness of the robot
-    def Get_Fitness(self, writePipe):
+    def Get_Fitness(self, connection):
 
         # gets the x position or fitness of the robot
         stateOfLinkZero = p.getLinkState(self.robotId, 0)
@@ -93,8 +93,8 @@ class ROBOT:
 
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
-        os.write(writePipe, str(xCoordinateOfLinkZero).encode("utf-8"))
-        os.close(writePipe)
+        connection.send(xCoordinateOfLinkZero)
+        connection.close()
 
         '''
         while not os.path.exists(f"data//tmp{self.myID}.txt"):

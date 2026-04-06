@@ -66,6 +66,6 @@ class SIMULATION:
 
 
     # evaluates the fitness of a specific robot
-    def Get_Fitness(self, writePipe):
+    def Get_Fitness(self, connection):
 
-        self.robot.Get_Fitness(writePipe)
+        self.robot.Get_Fitness(connection)

@@ -4,8 +4,8 @@ import constants as c
 import random
 import os
 import time
-import subprocess
-
+from multiprocessing import Process, Pipe
+from simulate import Run
 
 class SOLUTION:
 
@@ -15,13 +15,21 @@ class SOLUTION:
 
         self.myID = myID
 
-        self.readPipe, self.writePipe = os.pipe()
+        self.process = None
+
+        self.parent_connection, self.child_connection = Pipe()
 
 
     # sets ID for child solutions
     def Set_ID(self, myID):
 
         self.myID = myID
+
+
+    # sets the pipes for the next process
+    def Set_Pipes(self):
+
+        self.parent_connection, self.child_connection = Pipe()
 
 
     # Creates world
@@ -224,29 +232,20 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain()
 
-        # runs the simulation
-        if (c.SUPPRESS_PYBULLET_MESSAGES):
-
-            subprocess.Popen(["python3", "simulate.py", directOrGUI, str(self.myID), str(self.writePipe)],
-                             pass_fds=(self.writePipe,),
-                             stderr=subprocess.DEVNULL,
-                             stdout=subprocess.DEVNULL)
-            # os.system(f"python3 simulate.py {directOrGUI} {self.myID} {str(self.writePipe)} 2&>1 &")
-
-        else:
-
-            subprocess.Popen(["python3", "simulate.py", directOrGUI, str(self.myID), str(self.writePipe)],
-                             pass_fds=(self.writePipe,))
-            # os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
+        # TODO: write output to a file or supress
+        self.process = Process(target=Run, args=(directOrGUI, self.myID, self.child_connection, c.SUPPRESS_PYBULLET_MESSAGES))
+        self.process.start()
+        # os.system(f"python3 simulate.py {directOrGUI} {self.myID} {str(self.writePipe)} 2&>1 &")
+        # os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
 
 
 
     # reads in fitness value
     def Wait_For_Simulation_To_End(self):
 
-        os.close(self.writePipe)
-        self.fitness = float(os.read(self.readPipe, 100))
-        os.close(self.readPipe)
+        # gets fitness from subprocess and then wait to close
+        self.fitness = float(self.parent_connection.recv())
+        self.process.join()
 
         '''
         # checks that fitness file exists before opening

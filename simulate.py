@@ -1,13 +1,16 @@
 from simulation import SIMULATION
 import sys
+import os
 
-if __name__ == ("__main__"):
+def Run(directOrGUI, solutionID, connection, supressMessages):
 
-    directOrGUI = sys.argv[1]
-    solutionID = sys.argv[2]
-    writePipe = int(sys.argv[3])
+    # TODO: implement message suppression
+    if supressMessages:
+
+        pass
+
     simulation = SIMULATION(directOrGUI, solutionID)
 
     simulation.Run()
 
-    simulation.Get_Fitness(writePipe)
+    simulation.Get_Fitness(connection)
