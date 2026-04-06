@@ -11,7 +11,7 @@ class SOLUTION:
 
     def __init__(self, myID):
 
-        self.weights = 1 - (np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_MOTOR_NEURONS) * 2)
+        self.weights = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
 
         self.myID = myID
 
@@ -35,7 +35,7 @@ class SOLUTION:
     # Creates world
     def Create_World(self):
 
-        pyrosim.Start_SDF("world.sdf")
+        pyrosim.Start_SDF(f"world{self.myID}.sdf")
 
         length = 1
         width = 1
@@ -53,7 +53,7 @@ class SOLUTION:
     # creates the robots body
     def Create_Body(self):
 
-        pyrosim.Start_URDF("body.urdf")
+        pyrosim.Start_URDF(f"body{self.myID}.urdf")
 
         # create Torso
         length = 1
@@ -233,6 +233,7 @@ class SOLUTION:
         self.Create_Brain()
 
         # TODO: write output to a file or supress
+        # runs simulate.py
         self.process = Process(target=Run, args=(directOrGUI, self.myID, self.child_connection, c.SUPPRESS_PYBULLET_MESSAGES))
         self.process.start()
         # os.system(f"python3 simulate.py {directOrGUI} {self.myID} {str(self.writePipe)} 2&>1 &")
@@ -247,28 +248,10 @@ class SOLUTION:
         self.fitness = float(self.parent_connection.recv())
         self.process.join()
 
-        '''
-        # checks that fitness file exists before opening
-        print(f"searching for data//tmp{self.myID}.txt")
-        while not os.path.exists(f"data//fitness{self.myID}.txt")
-
-            time.sleep(0.01)
-
-        # read in fitness value for iteration
-        with open(f"data//fitness{self.myID}.txt", "r") as f:
-
-            self.fitness = float(f.read())
-
-            f.close()
-
-        # cleans up fitness file
-        os.system(f"rm data//fitness{self.myID}.txt")
-        '''
-
 
     def Mutate(self):
 
         randomRow = random.randint(0, c.NUM_SENSOR_NEURONS - 1)
         randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
 
-        self.weights[randomRow][randomColumn] = 1 - (random.random() * 2)
+        self.weights[randomRow][randomColumn] = random.random() * 2 - 1

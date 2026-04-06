@@ -12,7 +12,7 @@ class ROBOT:
     def __init__(self, solutionID):
 
         # loads robot from body.urdf
-        self.robotId = p.loadURDF("body.urdf")
+        self.robotId = p.loadURDF(f"body{solutionID}.urdf")
 
         # load neural network from brain.nndf
         self.myID = solutionID
@@ -29,6 +29,7 @@ class ROBOT:
 
         # cleans up brain files
         os.system(f"rm brain{self.myID}.nndf")
+        os.system(f"rm body{self.myID}.urdf")
 
 
     # prepares sensors for every link
@@ -87,23 +88,12 @@ class ROBOT:
     def Get_Fitness(self, connection):
 
         # gets the x position or fitness of the robot
-        stateOfLinkZero = p.getLinkState(self.robotId, 0)
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
 
-        positionOfLinkZero = stateOfLinkZero[0]
+        basePosition = basePositionAndOrientation[0]
 
-        xCoordinateOfLinkZero = positionOfLinkZero[0]
+        xPosition = basePosition[0]
 
-        connection.send(xCoordinateOfLinkZero)
+        # use pipe to send fitness to parent program
+        connection.send(xPosition)
         connection.close()
-
-        '''
-        while not os.path.exists(f"data//tmp{self.myID}.txt"):
-            # writes fitness to a temporary file
-            with open(f"data//tmp{self.myID}.txt", "w") as f:
-
-                f.write(str(xCoordinateOfLinkZero))
-                f.close()
-
-        # copys the fitness value to the fitness file
-        os.system(f"mv data//tmp{self.myID}.txt data//fitness{self.myID}.txt")
-        '''

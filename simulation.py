@@ -13,9 +13,12 @@ class SIMULATION:
 
         # connects to physics client
         if (directOrGUI == "DIRECT"):
+
             self.physicsClient = p.connect(p.DIRECT)
             self.shouldSleep = False
+
         else:
+
             self.physicsClient = p.connect(p.GUI)
             self.shouldSleep = True
 
@@ -24,12 +27,13 @@ class SIMULATION:
 
         # checks if pybullet debugger is enabled 
         if (not(c.PYBULLET_DEBUGGER)):
+
             p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
 
         # sets physics client gravity 
         p.setGravity(0, 0, -9.8, self.physicsClient)
 
-        self.world = WORLD()
+        self.world = WORLD(solutionID)
         self.robot = ROBOT(solutionID)
 
 

@@ -10,8 +10,10 @@ class PARALLEL_HILL_CLIMBER:
 
         # cleans up any files leftover from a crash
         os.system("rm brain*.nndf")
-        os.system("rm data//fitness*.txt")
-        os.system("rm data//tmp*.txt")
+        os.system("rm body*.urdf")
+        os.system("rm world*.sdf")
+        #os.system("rm data//fitness*.txt")
+        #os.system("rm data//tmp*.txt")
 
         self.parents = {}
 
@@ -124,6 +126,8 @@ class PARALLEL_HILL_CLIMBER:
             if (self.parents[bestSolution].fitness > self.parents[solution].fitness):
 
                 bestSolution = solution
+
+        self.parents[bestSolution].Set_Pipes()
 
         print(f"Best Fitness Found: {self.parents[bestSolution].fitness}")
         self.parents[bestSolution].Start_Simulation("GUI")
