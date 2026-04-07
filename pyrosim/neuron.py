@@ -42,6 +42,10 @@ class NEURON:
 
         return self.value
 
+    def Get_Recurrent_Value(self):
+
+        return self.recurrentValue
+
     def Is_Sensor_Neuron(self):
 
         return self.type == c.SENSOR_NEURON
@@ -72,11 +76,17 @@ class NEURON:
 
         self.value = value
 
+    def Set_Recurrent_Value(self, value):
+
+        self.recurrentValue = value
+
     def Update_Sensor_Neuron(self):
 
         self.Set_Value(pyrosim.Get_Touch_Sensor_Value_For_Link(self.Get_Link_Name()))
 
     def Update_Hidden_Or_Motor_Neuron(self, neurons, synapses):
+
+        self.Set_Recurrent_Value(self.Get_Value())
 
         self.Set_Value(0.0)
 
@@ -84,8 +94,15 @@ class NEURON:
 
             if synapse[1] == self.Get_Name():
                 # TODO: check if synapse is recurrant and if so use recurrent value
-                weight = synapses[synapse].Get_Weight()
-                presynapticNeuron = neurons[synapse[0]].Get_Value()
+                if synapses[synapse].Get_Type() == "recurrent":
+
+                    weight = synapses[synapse].Get_Weight()
+                    presynapticNeuron = neurons[synapse[0]].Get_Recurrent_Value()
+
+                else:
+
+                    weight = synapses[synapse].Get_Weight()
+                    presynapticNeuron = neurons[synapse[0]].Get_Value()
 
                 self.Allow_Presynaptic_Neuron_To_Influence_Me(weight, presynapticNeuron)
 
@@ -154,4 +171,3 @@ class NEURON:
     def Threshold(self):
 
         self.value = math.tanh(self.value)
-        self.recurrentValue = self.value

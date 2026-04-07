@@ -226,6 +226,17 @@ class SOLUTION:
 
                 pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
 
+        # add recurrent synapses
+        for currentRow in range(c.NUM_HIDDEN_NEURONS):
+
+            for currentColumn in range(c.NUM_HIDDEN_NEURONS):
+
+                if not(currentRow == currentColumn):
+
+                    pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "recurrent")
+
+
+
         # add synapses for hidden to motor
         for currentRow in range(c.NUM_HIDDEN_NEURONS):
 
