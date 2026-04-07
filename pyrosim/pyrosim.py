@@ -151,6 +151,10 @@ def Send_Sensor_Neuron(name,linkName):
 
     f.write('    <neuron name = "' + str(name) + '" type = "sensor" linkName = "' + linkName + '" />\n')
 
+def Send_Hidden_Neuron(name):
+    #TODO: working on implementing hidden neurons not sure if this creates correct file format
+   f.write('    <neuron name = "' + str(name) + '" type = "hidden"'" />\n')
+
 def Send_Sphere(name="default",pos=[0,0,0],radius=1):
 
     global availableLinkIndex
@@ -179,9 +183,9 @@ def Send_Sphere(name="default",pos=[0,0,0],radius=1):
 
     availableLinkIndex = availableLinkIndex + 1
 
-def Send_Synapse( sourceNeuronName , targetNeuronName , weight ):
+def Send_Synapse( sourceNeuronName , targetNeuronName , weight, type ):
 
-    f.write('    <synapse sourceNeuronName = "' + str(sourceNeuronName) + '" targetNeuronName = "' + str(targetNeuronName) + '" weight = "' + str(weight) + '" />\n')
+    f.write('    <synapse sourceNeuronName = "' + str(sourceNeuronName) + '" targetNeuronName = "' + str(targetNeuronName) + '" weight = "' + str(weight) + '" type = "' + type + '" />\n')
 
  
 def Set_Motor_For_Joint(bodyIndex,jointName,controlMode,targetPosition,maxForce):

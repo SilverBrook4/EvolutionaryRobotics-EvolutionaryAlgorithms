@@ -81,6 +81,7 @@ class ROBOT:
         self.nn.Update()
 
         if (c.SHOW_NN_UPDATES):
+
             self.nn.Print()
 
 

@@ -202,6 +202,9 @@ class SOLUTION:
         pyrosim.Send_Sensor_Neuron(name = 3, linkName = "LeftLowerLeg")
         pyrosim.Send_Sensor_Neuron(name = 4, linkName = "RightLowerLeg")
 
+        # TODO: add hidden neurons
+        pyrosim.Send_Hidden_Neuron()
+
         # adds motor neurons to neural network file
         pyrosim.Send_Motor_Neuron(name = 5, jointName = "Torso_BackLeg")
         pyrosim.Send_Motor_Neuron(name = 6, jointName = "Torso_FrontLeg")
@@ -212,13 +215,14 @@ class SOLUTION:
         pyrosim.Send_Motor_Neuron(name = 11, jointName = "LeftLeg_LeftLowerLeg")
         pyrosim.Send_Motor_Neuron(name = 12, jointName = "RightLeg_RightLowerLeg")
 
+        #TODO: connect hidden neurons via synapes 
 
         # adds synapses
-        for currentRow in range(c.NUM_SENSOR_NEURONS):
+        for currentRow in range(1, c.NUM_SENSOR_NEURONS):
 
             for currentColumn in range(c.NUM_MOTOR_NEURONS):
 
-                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn])
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
 
 
         pyrosim.End()

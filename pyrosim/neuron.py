@@ -20,6 +20,8 @@ class NEURON:
 
         self.Set_Value(0.0)
 
+        self.recurrentValue = 0.0
+
     def Add_To_Value( self, value ):
 
         self.Set_Value( self.Get_Value() + value )
@@ -62,6 +64,10 @@ class NEURON:
 
         # print("")
 
+    def Print_Recurrent(self):
+
+        self.Print_Recurrent_Value()
+
     def Set_Value(self,value):
 
         self.value = value
@@ -77,7 +83,7 @@ class NEURON:
         for synapse in synapses:
 
             if synapse[1] == self.Get_Name():
-
+                # TODO: check if synapse is recurrant and if so use recurrent value
                 weight = synapses[synapse].Get_Weight()
                 presynapticNeuron = neurons[synapse[0]].Get_Value()
 
@@ -125,6 +131,10 @@ class NEURON:
 
        print(self.value , " " , end="" )
 
+    def Print_Recurrent_Value(self):
+
+        print(self.recurrentValue, " ", end="")
+
     def Search_For_Joint_Name(self,line):
 
         if "jointName" in line:
@@ -144,3 +154,4 @@ class NEURON:
     def Threshold(self):
 
         self.value = math.tanh(self.value)
+        self.recurrentValue = self.value

@@ -22,6 +22,8 @@ class NEURAL_NETWORK:
 
         self.Print_Sensor_Neuron_Values()
 
+        self.Print_Hidden_Neuron_Recurrent_Values()
+
         self.Print_Hidden_Neuron_Values()
 
         self.Print_Motor_Neuron_Values()
@@ -116,6 +118,19 @@ class NEURAL_NETWORK:
             if self.neurons[neuronName].Is_Hidden_Neuron():
 
                 self.neurons[neuronName].Print()
+
+        print("")
+
+    # prints hidden neurons reccurent values
+    def Print_Hidden_Neuron_Recurrent_Values(self):
+
+        print("hidden neuron recurrent values: ", end = "")
+
+        for neuronName in sorted(self.neurons):
+
+            if self.neurons[neuronName].Is_Hidden_Neuron():
+
+                self.neurons[neuronName].Print_Reccurent()
 
         print("")
 

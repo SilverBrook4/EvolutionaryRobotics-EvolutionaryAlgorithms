@@ -14,6 +14,8 @@ class SYNAPSE:
 
         self.Determine_Weight(line)
 
+        self.Determine_Synapse_Type(line)
+
     def Get_Source_Neuron_Name(self):
 
         return self.sourceNeuronName
@@ -25,6 +27,11 @@ class SYNAPSE:
     def Get_Weight(self):
 
         return self.weight
+
+    # returns type of synapse recurrent or regular
+    def Get_Type(self):
+
+        return self.type
 
 # -------------------------- Private methods -------------------------
 
@@ -51,3 +58,12 @@ class SYNAPSE:
             splitLine = line.split('"')
 
             self.weight = float( splitLine[5] )
+
+    # determines synapes type
+    def Determine_Synapse_Type(self, line):
+
+        if "type" in line:
+
+            splitLine = line.split('"')
+
+            self.type = splitLine[7]
