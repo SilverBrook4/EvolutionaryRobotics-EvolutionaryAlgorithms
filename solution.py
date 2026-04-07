@@ -231,9 +231,8 @@ class SOLUTION:
 
             for currentColumn in range(c.NUM_HIDDEN_NEURONS):
 
-                if not(currentRow == currentColumn):
 
-                    pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "recurrent")
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow + c.NUM_SENSOR_NEURONS, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "recurrent")
 
 
 
@@ -242,7 +241,7 @@ class SOLUTION:
 
             for currentColumn in range(c.NUM_MOTOR_NEURONS):
 
-                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS + c.NUM_HIDDEN_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow + c.NUM_SENSOR_NEURONS, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS + c.NUM_HIDDEN_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
 
 
 
