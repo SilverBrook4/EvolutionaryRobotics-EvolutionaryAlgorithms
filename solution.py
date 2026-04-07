@@ -203,26 +203,36 @@ class SOLUTION:
         pyrosim.Send_Sensor_Neuron(name = 4, linkName = "RightLowerLeg")
 
         # TODO: add hidden neurons
-        pyrosim.Send_Hidden_Neuron()
+        pyrosim.Send_Hidden_Neuron(name = 5)
+        pyrosim.Send_Hidden_Neuron(name = 6)
+        pyrosim.Send_Hidden_Neuron(name = 7)
 
         # adds motor neurons to neural network file
-        pyrosim.Send_Motor_Neuron(name = 5, jointName = "Torso_BackLeg")
-        pyrosim.Send_Motor_Neuron(name = 6, jointName = "Torso_FrontLeg")
-        pyrosim.Send_Motor_Neuron(name = 7, jointName = "Torso_LeftLeg")
-        pyrosim.Send_Motor_Neuron(name = 8, jointName = "Torso_RightLeg")
-        pyrosim.Send_Motor_Neuron(name = 9, jointName = "BackLeg_BackLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 10, jointName = "FrontLeg_FrontLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 11, jointName = "LeftLeg_LeftLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 12, jointName = "RightLeg_RightLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 8, jointName = "Torso_BackLeg")
+        pyrosim.Send_Motor_Neuron(name = 9, jointName = "Torso_FrontLeg")
+        pyrosim.Send_Motor_Neuron(name = 10, jointName = "Torso_LeftLeg")
+        pyrosim.Send_Motor_Neuron(name = 11, jointName = "Torso_RightLeg")
+        pyrosim.Send_Motor_Neuron(name = 12, jointName = "BackLeg_BackLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 13, jointName = "FrontLeg_FrontLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 14, jointName = "LeftLeg_LeftLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 15, jointName = "RightLeg_RightLowerLeg")
 
         #TODO: connect hidden neurons via synapes 
 
-        # adds synapses
-        for currentRow in range(1, c.NUM_SENSOR_NEURONS):
+        # adds synapses from sensor to hidden
+        for currentRow in range(c.NUM_SENSOR_NEURONS):
+
+            for currentColumn in range(c.NUM_HIDDEN_NEURONS):
+
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
+
+        # add synapses for hidden to motor
+        for currentRow in range(c.NUM_HIDDEN_NEURONS):
 
             for currentColumn in range(c.NUM_MOTOR_NEURONS):
 
-                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS + c.NUM_HIDDEN_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
+
 
 
         pyrosim.End()

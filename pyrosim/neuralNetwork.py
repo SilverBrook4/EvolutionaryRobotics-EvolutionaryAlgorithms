@@ -130,7 +130,7 @@ class NEURAL_NETWORK:
 
             if self.neurons[neuronName].Is_Hidden_Neuron():
 
-                self.neurons[neuronName].Print_Reccurent()
+                self.neurons[neuronName].Print_Recurrent()
 
         print("")
 
