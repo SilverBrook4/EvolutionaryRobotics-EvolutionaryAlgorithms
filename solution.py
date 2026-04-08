@@ -128,10 +128,10 @@ class SOLUTION:
 
         pyrosim.Send_Cube(name="Elbow", pos=[x, y, z], size=[length, width, height])
 
-        # joint Elbow and Forarm
-        pyrosim.Send_Joint(name="Elbow_Forarm", parent="Elbow", child="Forarm", type="revolute", position=[0.1,0,0], jointAxis="1 0 0")
+        # joint Elbow and Forearm
+        pyrosim.Send_Joint(name="Elbow_Forearm", parent="Elbow", child="Forearm", type="revolute", position=[0.1,0,0], jointAxis="1 0 0")
 
-        # create Elbow
+        # create Forearm
         length = 0.6
         width = 0.33
         height = 0.33
@@ -140,12 +140,12 @@ class SOLUTION:
         y = 0
         z = 0
 
-        pyrosim.Send_Cube(name="Forarm", pos=[x, y, z], size=[length, width, height])
+        pyrosim.Send_Cube(name="Forearm", pos=[x, y, z], size=[length, width, height])
 
         # ----- Wrist -----
 
-        # joint Forarm and Wrist
-        pyrosim.Send_Joint(name="Forarm_Wrist", parent="Forarm", child="Wrist", type="revolute", position=[0.6,0,0], jointAxis="0 1 0")
+        # joint Forearm and Wrist
+        pyrosim.Send_Joint(name="Forarm_Wrist", parent="Forearm", child="Wrist", type="revolute", position=[0.6,0,0], jointAxis="0 1 0")
 
         # create Wrist
         length = 0.05
@@ -161,6 +161,7 @@ class SOLUTION:
         # joint Wrist and Palm
         pyrosim.Send_Joint(name="Wrist_Palm", parent="Wrist", child="Palm", type="revolute", position=[0.05,0,0], jointAxis="0 0 1")
 
+        # TODO: Finish Hand
         # ----- Hand ----
         # create Palm
         length = 0.5
