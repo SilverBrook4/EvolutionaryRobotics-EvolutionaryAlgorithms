@@ -1,4 +1,7 @@
 import pyrosim.pyrosim as pyrosim
+print(pyrosim.__file__)
+import inspect
+print(inspect.getsource(pyrosim.Send_Sphere))
 import numpy as np
 import constants as c
 import random
@@ -37,15 +40,13 @@ class SOLUTION:
 
         pyrosim.Start_SDF(f"world{self.myID}.sdf")
 
-        length = 1
-        width = 1
-        height = 1
+        radius = 0.5
 
         x = -5
         y = 5
         z = 0.5
 
-        pyrosim.Send_Cube(name="Box", pos=[x, y, z], size=[length, width, height])
+        pyrosim.Send_Sphere(name="Ball", pos=[x, y, z], radius=radius)
 
         pyrosim.End()
 
