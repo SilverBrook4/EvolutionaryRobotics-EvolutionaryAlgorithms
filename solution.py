@@ -55,33 +55,128 @@ class SOLUTION:
 
         pyrosim.Start_URDF(f"body{self.myID}.urdf")
 
-        # create Torso
+        # create Body
         length = 1
         width = 1
         height = 1
 
         x = 0
         y = 0
-        z = 1
+        z = 0.5
 
-        pyrosim.Send_Cube(name="Torso", pos=[x, y, z], size=[length, width, height])
+        pyrosim.Send_Cube(name="Body", pos=[x, y, z], size=[length, width, height])
 
-        # ----- Upper Legs ----
+        # ----- Upper Arm -----
 
-        # joint Torso and BackLeg
-        pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0,-0.5,1], jointAxis="1 0 0")
+        # joint Body and ShoulderSocket
+        pyrosim.Send_Joint(name="Body_ShoulderSocket", parent="Body", child="ShoulderSocket", type="revolute", position=[0.5,0,0.5], jointAxis="1 0 0")
 
-        # create BackLeg
-        length = 0.2
-        width = 1
-        height = 0.2
+        # create ShoulderSocket
+        length = 0.1
+        width = 0.33
+        height = 0.33
 
-        x = 0
-        y = -0.5
+        x = 0.05
+        y = 0
         z = 0
 
-        pyrosim.Send_Cube(name="BackLeg", pos=[x, y, z], size=[length, width, height])
+        pyrosim.Send_Cube(name="ShoulderSocket", pos=[x, y, z], size=[length, width, height])
 
+        # joint ShoulderSocket and ShoulderBall
+        pyrosim.Send_Joint(name="ShoulderSocket_ShoulderBall", parent="ShoulderSocket", child="ShoulderBall", type="revolute", position=[0.1,0,0], jointAxis="0 1 0")
+
+
+        # create ShoulderBall
+        length = 0.1
+        width = 0.33
+        height = 0.33
+
+        x = 0.05
+        y = 0
+        z = 0
+
+        pyrosim.Send_Cube(name="ShoulderBall", pos=[x, y, z], size=[length, width, height])
+
+        # joint ShoulderBall and UpperArm
+        pyrosim.Send_Joint(name="ShoulderBall_UpperArm", parent="ShoulderBall", child="UpperArm", type="revolute", position=[0.1,0,0], jointAxis="0 0 1")
+
+
+        # create ShoulderBall
+        length = 0.8
+        width = 0.33
+        height = 0.33
+
+        x = 0.4
+        y = 0
+        z = 0
+
+        pyrosim.Send_Cube(name="UpperArm", pos=[x, y, z], size=[length, width, height])
+
+        # ----- Forarm -----
+
+        # joint UpperArm and Elbow
+        pyrosim.Send_Joint(name="UpperArm_Elbow", parent="UpperArm", child="Elbow", type="revolute", position=[0.8,0,0], jointAxis="0 0 1")
+
+        # create Elbow
+        length = 0.1
+        width = 0.33
+        height = 0.33
+
+        x = 0.05
+        y = 0
+        z = 0
+
+        pyrosim.Send_Cube(name="Elbow", pos=[x, y, z], size=[length, width, height])
+
+        # joint Elbow and Forarm
+        pyrosim.Send_Joint(name="Elbow_Forarm", parent="Elbow", child="Forarm", type="revolute", position=[0.1,0,0], jointAxis="1 0 0")
+
+        # create Elbow
+        length = 0.6
+        width = 0.33
+        height = 0.33
+
+        x = 0.3
+        y = 0
+        z = 0
+
+        pyrosim.Send_Cube(name="Forarm", pos=[x, y, z], size=[length, width, height])
+
+        # ----- Wrist -----
+
+        # joint Forarm and Wrist
+        pyrosim.Send_Joint(name="Forarm_Wrist", parent="Forarm", child="Wrist", type="revolute", position=[0.6,0,0], jointAxis="0 1 0")
+
+        # create Wrist
+        length = 0.05
+        width = 0.33
+        height = 0.33
+
+        x = 0.025
+        y = 0
+        z = 0
+
+        pyrosim.Send_Cube(name="Wrist", pos=[x, y, z], size=[length, width, height])
+
+        # joint Wrist and Palm
+        pyrosim.Send_Joint(name="Wrist_Palm", parent="Wrist", child="Palm", type="revolute", position=[0.05,0,0], jointAxis="0 0 1")
+
+        # ----- Hand ----
+        # create Palm
+        length = 0.5
+        width = 0.5
+        height = 0.2
+
+        x = 0.25
+        y = 0
+        z = 0
+
+        pyrosim.Send_Cube(name="Palm", pos=[x, y, z], size=[length, width, height])
+
+
+
+
+        '''
         # joint Torso and FrontLeg
         pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg", type="revolute", position=[0,0.5,1], jointAxis="1 0 0")
 
@@ -182,6 +277,8 @@ class SOLUTION:
 
         pyrosim.Send_Cube(name="RightLowerLeg", pos=[x, y, z], size=[length, width, height])
 
+        '''
+
         pyrosim.End()
 
 
@@ -189,20 +286,15 @@ class SOLUTION:
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
 
+        '''
         # adds sensor neurons to neural network file
         pyrosim.Send_Sensor_Neuron(name = 0, linkName = "Torso")
-        '''
-        pyrosim.Send_Sensor_Neuron(name = 1, linkName = "BackLeg")
-        pyrosim.Send_Sensor_Neuron(name = 2, linkName = "FrontLeg")
-        pyrosim.Send_Sensor_Neuron(name = 3, linkName = "LeftLeg")
-        pyrosim.Send_Sensor_Neuron(name = 4, linkName = "RightLeg")
-        '''
+
         pyrosim.Send_Sensor_Neuron(name = 1, linkName = "BackLowerLeg")
         pyrosim.Send_Sensor_Neuron(name = 2, linkName = "FrontLowerLeg")
         pyrosim.Send_Sensor_Neuron(name = 3, linkName = "LeftLowerLeg")
         pyrosim.Send_Sensor_Neuron(name = 4, linkName = "RightLowerLeg")
 
-        # TODO: add hidden neurons
         pyrosim.Send_Hidden_Neuron(name = 5)
         pyrosim.Send_Hidden_Neuron(name = 6)
         pyrosim.Send_Hidden_Neuron(name = 7)
@@ -217,7 +309,6 @@ class SOLUTION:
         pyrosim.Send_Motor_Neuron(name = 14, jointName = "LeftLeg_LeftLowerLeg")
         pyrosim.Send_Motor_Neuron(name = 15, jointName = "RightLeg_RightLowerLeg")
 
-        #TODO: connect hidden neurons via synapes 
 
         # adds synapses from sensor to hidden
         for currentRow in range(c.NUM_SENSOR_NEURONS):
@@ -243,8 +334,7 @@ class SOLUTION:
 
                 pyrosim.Send_Synapse(sourceNeuronName = currentRow + c.NUM_SENSOR_NEURONS, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS + c.NUM_HIDDEN_NEURONS, weight = self.weights[currentRow][currentColumn], type = "regular")
 
-
-
+        '''
         pyrosim.End()
 
 

@@ -152,7 +152,7 @@ def Send_Sensor_Neuron(name,linkName):
     f.write('    <neuron name = "' + str(name) + '" type = "sensor" linkName = "' + linkName + '" />\n')
 
 def Send_Hidden_Neuron(name):
-    #TODO: working on implementing hidden neurons not sure if this creates correct file format
+
    f.write('    <neuron name = "' + str(name) + '" type = "hidden" />\n')
 
 def Send_Sphere(name="default",pos=[0,0,0],radius=1):

@@ -3,13 +3,13 @@ import numpy
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 2 # the number of generations that will be evolved
 
-POPULATION_SIZE = 5 # number of nn's in a population
+POPULATION_SIZE = 2 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 500 # sets number of simulation steps
+NUM_SIM_STEPS = 10000 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 
