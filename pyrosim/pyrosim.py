@@ -109,7 +109,7 @@ def Prepare_To_Simulate(bodyID):
 
     Prepare_Joint_Dictionary(bodyID)
 
-def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1],mass=1.0):
+def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1],mass=1.0,rpy=[0,0,0]):
 
     global availableLinkIndex
 
@@ -123,7 +123,7 @@ def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1],mass=1.0):
 
         links.append(link)
     else:
-        link = LINK_URDF(name,pos,size,mass)
+        link = LINK_URDF(name,pos,size,mass,rpy)
 
         links.append(link)
 
@@ -155,7 +155,7 @@ def Send_Hidden_Neuron(name):
 
    f.write('    <neuron name = "' + str(name) + '" type = "hidden" />\n')
 
-def Send_Sphere(name="default",pos=[0,0,0],radius=1.0,mass=1.0):
+def Send_Sphere(name="default",pos=[0,0,0],radius=1.0,mass=1.0,rpy=[0,0,0]):
 
     global availableLinkIndex
 
@@ -169,7 +169,7 @@ def Send_Sphere(name="default",pos=[0,0,0],radius=1.0,mass=1.0):
     
         links.append(link)
     else:
-        link = LINK_URDF("sphere",name,pos,radius,mass)
+        link = LINK_URDF("sphere",name,pos,radius,mass,rpy)
         
         links.append(link)
     
