@@ -1,7 +1,4 @@
 import pyrosim.pyrosim as pyrosim
-print(pyrosim.__file__)
-import inspect
-print(inspect.getsource(pyrosim.Send_Sphere))
 import numpy as np
 import constants as c
 import random
@@ -46,7 +43,9 @@ class SOLUTION:
         y = 5
         z = 0.5
 
-        pyrosim.Send_Sphere(name="Ball", pos=[x, y, z], radius=radius)
+        mass = 50
+
+        pyrosim.Send_Sphere(name="Ball", pos=[x, y, z], radius=radius, mass=mass)
 
         pyrosim.End()
 
@@ -65,7 +64,9 @@ class SOLUTION:
         y = 0
         z = 0.5
 
-        pyrosim.Send_Cube(name="Body", pos=[x, y, z], size=[length, width, height])
+        mass = 50
+
+        pyrosim.Send_Cube(name="Body", pos=[x, y, z], size=[length, width, height], mass=mass)
 
         # ----- Upper Arm -----
 
