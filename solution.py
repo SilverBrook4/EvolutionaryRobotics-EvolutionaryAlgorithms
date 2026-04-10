@@ -64,7 +64,7 @@ class SOLUTION:
         y = 0
         z = 0.5
 
-        mass = 50
+        mass = 500
 
         pyrosim.Send_Cube(name="Body", pos=[x, y, z], size=[length, width, height], mass=mass)
 
@@ -161,7 +161,7 @@ class SOLUTION:
         pyrosim.Send_Cube(name="Wrist", pos=[x, y, z], size=[length, width, height])
 
         # joint Wrist and Palm
-        pyrosim.Send_Joint(name="Wrist_Palm", parent="Wrist", child="Palm", type="revolute", position=[0.05,0,0], jointAxis="0 0 1")
+        pyrosim.Send_Joint(name="Wrist_Palm", parent="Wrist", child="Palm", type="revolute", position=[0.05,0,0.0825], jointAxis="0 0 1")
 
         # TODO: Finish Hand
         # ----- Hand ----
@@ -175,6 +175,94 @@ class SOLUTION:
         z = 0
 
         pyrosim.Send_Cube(name="Palm", pos=[x, y, z], size=[length, width, height])
+
+        # ----- Left Fingure -----
+        # joint Palm and LeftFingureBase
+        pyrosim.Send_Joint(name="Palm_LeftFingureBase", parent="Palm", child="LeftFingureBase", type="revolute", position=[0.4,0.2,0.1], jointAxis="0 1 0")
+
+        # create LeftFingureBase
+        length = 0.25
+        width = 0.25
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="LeftFingureBase", pos=[x, y, z], size=[length, width, height])
+
+        # joint LeftFingureBase and LeftFingureTip
+        pyrosim.Send_Joint(name="LeftFingureBase_LeftFingureTip", parent="LeftFingureBase", child="LeftFingureTip", type="revolute", position=[0.25,-0.05,0], jointAxis="0 1 0")
+
+        # create LeftFingure
+        length = 0.25
+        width = 0.2
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="LeftFingureTip", pos=[x, y, z], size=[length, width, height])
+
+        # ----- Right Fingure -----
+        # joint Palm and LeftFingureBase
+        pyrosim.Send_Joint(name="Palm_RightFingureBase", parent="Palm", child="RightFingureBase", type="revolute", position=[0.4,-0.2,0.1], jointAxis="0 1 0")
+
+        # create LeftFingureBase
+        length = 0.25
+        width = 0.25
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="RightFingureBase", pos=[x, y, z], size=[length, width, height])
+
+        # joint LeftFingureBase and LeftFingureTip
+        pyrosim.Send_Joint(name="RightFingureBase_RightFingureTip", parent="RightFingureBase", child="RightFingureTip", type="revolute", position=[0.25,0.05,0], jointAxis="0 1 0")
+
+        # create LeftFingure
+        length = 0.25
+        width = 0.2
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="RightFingureTip", pos=[x, y, z], size=[length, width, height])
+
+        # ----- Thumb -----
+        # joint Palm and Thumb Base
+        pyrosim.Send_Joint(name="Palm_ThumbBase", parent="Palm", child="ThumbBase", type="revolute", position=[0.1,0,0.1], jointAxis="0 1 0")
+
+        # create LeftFingureBase
+        length = 0.3
+        width = 0.3
+        height = 0.1
+
+        x = -(length / 2)
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="ThumbBase", pos=[x, y, z], size=[length, width, height])
+
+        # joint LeftFingureBase and LeftFingureTip
+        pyrosim.Send_Joint(name="ThumbBase_ThumbTip", parent="ThumbBase", child="ThumbTip", type="revolute", position=[-0.3,0.,0], jointAxis="0 1 0")
+
+        # create LeftFingure
+        length = 0.2
+        width = 0.2
+        height = 0.1
+
+        x = -(length / 2)
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="ThumbTip", pos=[x, y, z], size=[length, width, height])
+
 
 
 
@@ -372,3 +460,21 @@ class SOLUTION:
         randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
 
         self.weights[randomRow][randomColumn] = random.random() * 2 - 1
+
+
+    # gets x, y and theta of fingures put on a unit circle from center of previous link
+    def Get_Fingure_Pos(self, radius, unitTheta):
+
+        # calculate x and y
+        x = radius + (radius * np.cos(unitTheta))
+        y = radius * np.sin(unitTheta)
+
+        '''
+        a = radius
+        c = radius
+        b = np.sqrt(np.square(x) + np.square(y))
+
+        theta = np.sqrt(np.square(a) + np.square(b) - (2 * a * b * np.cos(c)))
+        '''
+
+        return [x, y]
