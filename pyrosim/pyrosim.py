@@ -63,6 +63,17 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
 
     return touchValue
 
+# TODO: wirte function that detects contact between supplied object names
+def Get_Contact_Between_Objects(objA, objB):
+
+    touchValue = -1.0
+
+    if p.getContactPoints(bodyA=objA, bodyB=objB):
+
+        touchValue = 1.0
+
+    return touchValue
+
 def Prepare_Link_Dictionary(bodyID):
 
     global linkNamesToIndices

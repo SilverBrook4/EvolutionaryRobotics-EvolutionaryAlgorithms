@@ -18,6 +18,11 @@ class SENSOR:
 
         self.values[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(self.linkName)
 
+    # gets if sensor is contacting a specific object
+    def Get_Is_Touching_Object(self, i, objName):
+
+        self.values[i] = pyrosim.Get_Contact_Between_Objects(self.linkName, objName)
+
 
     # saves sensor input to disk
     def Save_Values(self):

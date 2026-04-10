@@ -42,7 +42,7 @@ class SOLUTION:
         height = 1
 
         x = 0
-        y = 3
+        y = 5
         z = 3
 
         mass = 0
@@ -53,7 +53,7 @@ class SOLUTION:
 
         x = 2.5
         y = 0
-        z = 1
+        z = 2
 
         mass = 50
 

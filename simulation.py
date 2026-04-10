@@ -55,7 +55,8 @@ class SIMULATION:
 
             p.stepSimulation()
 
-            # runs sensors in robots links
+            # runs sensors in robots links and world
+            self.world.Sense(i)
             self.robot.Sense(i)
 
             # tells the robot to interpret sensor input with its neural network
