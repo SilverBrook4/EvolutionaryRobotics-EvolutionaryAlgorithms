@@ -14,6 +14,8 @@ from pyrosim.urdf  import URDF
 
 from pyrosim.joint import JOINT
 
+import numpy as np
+
 SDF_FILETYPE  = 0
 
 URDF_FILETYPE = 1
@@ -63,7 +65,13 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
 
     return touchValue
 
-# TODO: wirte function that detects contact between supplied object names
+def Get_Link_Position(robotId, link):
+
+    linkIndex = linkNamesToIndices[link]
+    linkState = p.getLinkState(robotId, linkIndex)
+    return linkState[0]
+
+# detects contace between objects
 def Get_Contact_Between_Objects(objA, objB):
 
     touchValue = -1.0
@@ -73,6 +81,52 @@ def Get_Contact_Between_Objects(objA, objB):
         touchValue = 1.0
 
     return touchValue
+
+def Get_Joint_Angle(robotId, joint):
+
+    jointIndex = jointNamesToIndices[joint]
+    jointState = p.getJointState(robotId, jointIndex)
+    return jointState[0]
+
+# TODO:
+def Get_Contact_Sensor_Value_For_Top(objA, objB, robotId):
+
+    result = -1.0
+
+    contactPoints = p.getContactPoints(bodyA=objA, bodyB=objB)
+
+    if contactPoints == None:
+
+        return result
+    else:
+
+        print("contact")
+
+    # get object A's orientation
+    objStateA = p.getLinkState(robotId, objA)
+    objOrientationA = objStateA[1] # quaternion
+
+    # make ration matrix from supplied quaternion
+    rotationMatrixA = np.array(p.getMatrixFromQuaternion(objOrientationA)).reshape(3, 3)
+
+    for contact in contactPoints:
+
+        linkHit = contact[3]
+        normal = np.array(contact[7])
+
+        if linkHit == objA:
+
+            print("Palm Hit")
+
+            localNormal = rotationMatrixA.T @ normal
+
+            if (localNormal[2] > 0.9):
+                print("PalmHitUpright")
+                result = 1.0
+                return result
+
+    return result
+
 
 def Prepare_Link_Dictionary(bodyID):
 

@@ -9,7 +9,7 @@ POPULATION_SIZE = 2 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 10000 # sets number of simulation steps
+NUM_SIM_STEPS = 5000 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 

@@ -22,3 +22,7 @@ class WORLD:
 
         self.goalSensor.Get_Is_Touching_Object(i, self.objects[1])
         self.ballSensor.Get_Is_Touching_Object(i, self.planeId)
+
+    def Get_Ball_ID(self):
+
+        return self.objects[1]

@@ -35,19 +35,32 @@ class ROBOT:
     # prepares sensors for every link
     def Prepare_To_Sense(self):
 
-        self.sensors = {}
+        # initilizes joint angle sensors
+        self.jointSensors = {}
 
-        for linkName in pyrosim.linkNamesToIndices:
+        for joint in pyrosim.jointNamesToIndices:
 
-            self.sensors[linkName] = SENSOR(linkName)
+            self.jointSensors[joint] = SENSOR(joint)
+
+        # create palm sensor
+        palmIndex = pyrosim.linkNamesToIndices["Palm"]
+        self.palmSensor = SENSOR(palmIndex)
+
+        self.palmLocationSensor = SENSOR("Palm")
 
 
     # get and store sensor data for robot object
-    def Sense(self, i):
+    def Sense(self, i, ballId):
 
-        for sensor in self.sensors.values():
+        for sensor in self.jointSensors.values():
 
-            sensor.Get_Value(i)
+            sensor.Get_Joint_Angle(i, self.robotId)
+
+        self.palmLocationSensor.Get_Link_Position(i, self.robotId)
+
+        # TODO: Make this work
+        # sense if ball is in hand palm
+        #self.palmSensor.Get_Is_On_Top_Off(i, self.robotId, ballId)
 
 
     # prepare motors at each joint

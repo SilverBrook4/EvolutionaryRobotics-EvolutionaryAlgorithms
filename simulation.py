@@ -57,7 +57,7 @@ class SIMULATION:
 
             # runs sensors in robots links and world
             self.world.Sense(i)
-            self.robot.Sense(i)
+            self.robot.Sense(i, self.world.Get_Ball_ID())
 
             # tells the robot to interpret sensor input with its neural network
             self.robot.Think()
