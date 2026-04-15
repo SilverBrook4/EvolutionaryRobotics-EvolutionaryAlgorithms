@@ -12,6 +12,8 @@ class SENSOR:
         # initilaize sensor data array to 0's
         self.values = np.zeros(c.NUM_SIM_STEPS)
 
+        self.firstRun = True
+
 
     # stores sensor value in values at index i
     def Get_Value(self, i):
@@ -40,9 +42,18 @@ class SENSOR:
 
     def Get_Link_Position(self, i, robotId):
 
+        if self.firstRun:
+
+            self.values = np.zeros((c.NUM_SIM_STEPS, 3))
+
         x, y, z = pyrosim.Get_Link_Position(robotId, self.name)
-        #self.values[i] = [x, y, z]
-        print(f"X: {x}, Y: {y}, Z: {z}")
+        self.values[i] = [x, y, z]
+
+
+    def Get_Distance_To(self, i, obj):
+
+        self.values[i] = pyrosim.Get_Distance_Between(self.name, obj)
+        print(self.values[i])
 
     # saves sensor input to disk
     def Save_Values(self):

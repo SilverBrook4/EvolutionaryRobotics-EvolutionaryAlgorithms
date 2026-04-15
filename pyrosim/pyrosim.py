@@ -114,6 +114,8 @@ def Get_Contact_Sensor_Value_For_Top(objA, objB, robotId):
         linkHit = contact[3]
         normal = np.array(contact[7])
 
+        print(f"{linkHit} == {objA}")
+
         if linkHit == objA:
 
             print("Palm Hit")
@@ -126,6 +128,12 @@ def Get_Contact_Sensor_Value_For_Top(objA, objB, robotId):
                 return result
 
     return result
+
+def Get_Distance_Between(objA, objB):
+
+    distance = p.getClosestPoints(bodyA=objA, bodyB=objB, distance=1000)
+
+    return distance[0][8]
 
 
 def Prepare_Link_Dictionary(bodyID):

@@ -17,11 +17,13 @@ class WORLD:
 
         self.goalSensor = SENSOR(self.objects[0])
         self.ballSensor = SENSOR(self.objects[1])
+        self.goalBallDistanceSensor = SENSOR(self.objects[0])
 
     def Sense(self, i):
 
         self.goalSensor.Get_Is_Touching_Object(i, self.objects[1])
         self.ballSensor.Get_Is_Touching_Object(i, self.planeId)
+        self.goalBallDistanceSensor.Get_Distance_To(i, self.objects[1])
 
     def Get_Ball_ID(self):
 
