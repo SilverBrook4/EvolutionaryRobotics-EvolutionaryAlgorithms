@@ -60,16 +60,29 @@ class ROBOT:
     # get and store sensor data for robot object
     def Sense(self, i, ballId):
 
+        currentSensorValues = []
+
         for sensor in self.jointSensors.values():
 
             sensor.Get_Joint_Angle(i, self.robotId)
+            currentSensorValues.append(sensor.Get_Current_Value(i))
 
         self.palmLocationSensor.Get_Link_Position(i, self.robotId)
+        pos = self.palmLocationSensor.Get_Current_Value(i)
+        currentSensorValues.append(pos[0])
+        currentSensorValues.append(pos[1])
+        currentSensorValues.append(pos[2])
 
         self.palmTouchSensorQ1.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.palmTouchSensorQ1.Get_Current_Value(i))
         self.palmTouchSensorQ2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.palmTouchSensorQ2.Get_Current_Value(i))
         self.palmTouchSensorQ3.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.palmTouchSensorQ3.Get_Current_Value(i))
         self.palmTouchSensorQ4.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.palmTouchSensorQ4.Get_Current_Value(i))
+
+        return currentSensorValues
 
 
     # prepare motors at each joint
@@ -98,9 +111,9 @@ class ROBOT:
 
 
     # activates neural network to interpret sensor input and update robot
-    def Think(self):
+    def Think(self, sensorValues):
 
-        self.nn.Update()
+        self.nn.Update(sensorValues)
 
         if (c.SHOW_NN_UPDATES):
 

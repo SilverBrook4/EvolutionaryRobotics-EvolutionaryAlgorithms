@@ -25,6 +25,8 @@ class WORLD:
         self.ballSensor.Get_Is_Touching_Object(i, self.planeId)
         self.goalBallDistanceSensor.Get_Distance_To(i, self.objects[1])
 
+        return self.goalBallDistanceSensor.Get_Current_Value(i)
+
     def Get_Ball_ID(self):
 
         return self.objects[1]

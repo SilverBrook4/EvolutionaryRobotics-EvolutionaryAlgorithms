@@ -19,6 +19,8 @@ class SOLUTION:
 
         self.parent_connection, self.child_connection = Pipe()
 
+        self.joints = []
+
 
     # sets ID for child solutions
     def Set_ID(self, myID):
@@ -84,6 +86,7 @@ class SOLUTION:
 
         # joint Body and ShoulderSocket
         pyrosim.Send_Joint(name="Body_ShoulderSocket", parent="Body", child="ShoulderSocket", type="revolute", position=[0.5,0,0.5], jointAxis="1 0 0")
+        self.joints.append("Body_ShoulderSocket")
 
         # create ShoulderSocket
         length = 0.1
@@ -98,7 +101,7 @@ class SOLUTION:
 
         # joint ShoulderSocket and ShoulderBall
         pyrosim.Send_Joint(name="ShoulderSocket_ShoulderBall", parent="ShoulderSocket", child="ShoulderBall", type="revolute", position=[0.1,0,0], jointAxis="0 1 0")
-
+        self.joints.append("ShoulderSocket_ShoulderBall")
 
         # create ShoulderBall
         length = 0.1
@@ -113,7 +116,7 @@ class SOLUTION:
 
         # joint ShoulderBall and UpperArm
         pyrosim.Send_Joint(name="ShoulderBall_UpperArm", parent="ShoulderBall", child="UpperArm", type="revolute", position=[0.1,0,0], jointAxis="0 0 1")
-
+        self.joints.append("ShoulderBall_UpperArm")
 
         # create ShoulderBall
         length = 0.8
@@ -130,6 +133,7 @@ class SOLUTION:
 
         # joint UpperArm and Elbow
         pyrosim.Send_Joint(name="UpperArm_Elbow", parent="UpperArm", child="Elbow", type="revolute", position=[0.8,0,0], jointAxis="0 0 1")
+        self.joints.append("UpperArm_Elbow")
 
         # create Elbow
         length = 0.1
@@ -144,6 +148,7 @@ class SOLUTION:
 
         # joint Elbow and Forearm
         pyrosim.Send_Joint(name="Elbow_Forearm", parent="Elbow", child="Forearm", type="revolute", position=[0.1,0,0], jointAxis="1 0 0")
+        self.joints.append("Elbow_Forearm")
 
         # create Forearm
         length = 0.6
@@ -160,6 +165,7 @@ class SOLUTION:
 
         # joint Forearm and Wrist
         pyrosim.Send_Joint(name="Forarm_Wrist", parent="Forearm", child="Wrist", type="revolute", position=[0.6,0,0], jointAxis="0 1 0")
+        self.joints.append("Forarm_Wrist")
 
         # create Wrist
         length = 0.05
@@ -174,6 +180,7 @@ class SOLUTION:
 
         # joint Wrist and Palm
         pyrosim.Send_Joint(name="Wrist_Palm", parent="Wrist", child="Palm", type="revolute", position=[0.05,0,0.0825], jointAxis="0 0 1")
+        self.joints.append("Wrist_Palm")
 
         # ----- Hand ----
         # create Palm
@@ -240,6 +247,7 @@ class SOLUTION:
         # ----- Left Fingure -----
         # joint Palm and LeftFingureBase
         pyrosim.Send_Joint(name="Palm_LeftFingureBase", parent="Palm", child="LeftFingureBase", type="revolute", position=[0.4,0.2,0.1], jointAxis="0 1 0")
+        self.joints.append("Palm_LeftFingureBase")
 
         # create LeftFingureBase
         length = 0.25
@@ -254,6 +262,7 @@ class SOLUTION:
 
         # joint LeftFingureBase and LeftFingureTip
         pyrosim.Send_Joint(name="LeftFingureBase_LeftFingureTip", parent="LeftFingureBase", child="LeftFingureTip", type="revolute", position=[0.25,-0.05,0], jointAxis="0 1 0")
+        self.joints.append("LeftFingureBase_LeftFingureTip")
 
         # create LeftFingure
         length = 0.25
@@ -269,6 +278,7 @@ class SOLUTION:
         # ----- Right Fingure -----
         # joint Palm and LeftFingureBase
         pyrosim.Send_Joint(name="Palm_RightFingureBase", parent="Palm", child="RightFingureBase", type="revolute", position=[0.4,-0.2,0.1], jointAxis="0 1 0")
+        self.joints.append("Palm_RightFingureBase")
 
         # create LeftFingureBase
         length = 0.25
@@ -283,6 +293,7 @@ class SOLUTION:
 
         # joint LeftFingureBase and LeftFingureTip
         pyrosim.Send_Joint(name="RightFingureBase_RightFingureTip", parent="RightFingureBase", child="RightFingureTip", type="revolute", position=[0.25,0.05,0], jointAxis="0 1 0")
+        self.joints.append("RightFingureBase_RightFingureTip")
 
         # create LeftFingure
         length = 0.25
@@ -298,6 +309,7 @@ class SOLUTION:
         # ----- Thumb -----
         # joint Palm and Thumb Base
         pyrosim.Send_Joint(name="Palm_ThumbBase", parent="Palm", child="ThumbBase", type="revolute", position=[0.1,0,0.1], jointAxis="0 1 0")
+        self.joints.append("Palm_ThumbBase")
 
         # create LeftFingureBase
         length = 0.3
@@ -312,6 +324,7 @@ class SOLUTION:
 
         # joint LeftFingureBase and LeftFingureTip
         pyrosim.Send_Joint(name="ThumbBase_ThumbTip", parent="ThumbBase", child="ThumbTip", type="revolute", position=[-0.3,0.,0], jointAxis="0 1 0")
+        self.joints.append("ThumbBase_ThumbTip")
 
         # create LeftFingure
         length = 0.2
@@ -330,6 +343,23 @@ class SOLUTION:
     # creates the robots neural network
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
+
+        neuronIndex = 0
+        for i in range(c.NUM_SENSOR_NEURONS):
+
+            pyrosim.Send_Sensor_Neuron(name = neuronIndex, linkName = f"neuronIndex")
+            neuronIndex = neuronIndex + 1
+
+        for i in range(c.NUM_MOTOR_NEURONS):
+
+            pyrosim.Send_Motor_Neuron(name = neuronIndex, jointName = self.joints[i])
+            neuronIndex = neuronIndex + 1
+
+        for currentRow in range(c.NUM_SENSOR_NEURONS):
+
+            for currentColumn in range(c.NUM_MOTOR_NEURONS):
+
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight=self.weights[currentRow][currentColumn], type="regular")
 
         '''
         # adds sensor neurons to neural network file

@@ -80,9 +80,9 @@ class NEURON:
 
         self.recurrentValue = value
 
-    def Update_Sensor_Neuron(self):
+    def Update_Sensor_Neuron(self, sensedValue):
 
-        self.Set_Value(pyrosim.Get_Touch_Sensor_Value_For_Link(self.Get_Link_Name()))
+        self.Set_Value(sensedValue)
 
     def Update_Hidden_Or_Motor_Neuron(self, neurons, synapses):
 
@@ -93,7 +93,7 @@ class NEURON:
         for synapse in synapses:
 
             if synapse[1] == self.Get_Name():
-                # TODO: check if synapse is recurrant and if so use recurrent value
+
                 if synapses[synapse].Get_Type() == "recurrent":
 
                     weight = synapses[synapse].Get_Weight()

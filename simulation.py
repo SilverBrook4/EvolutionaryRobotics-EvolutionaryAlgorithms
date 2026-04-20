@@ -56,11 +56,11 @@ class SIMULATION:
             p.stepSimulation()
 
             # runs sensors in robots links and world
-            self.world.Sense(i)
-            self.robot.Sense(i, self.world.Get_Ball_ID())
+            worldSensorvalues = self.world.Sense(i)
+            robotSensorValues = self.robot.Sense(i, self.world.Get_Ball_ID())
 
             # tells the robot to interpret sensor input with its neural network
-            self.robot.Think()
+            self.robot.Think(robotSensorValues + worldSensorvalues)
 
             # updates motors for the current step
             self.robot.Act(i)

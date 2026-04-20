@@ -15,6 +15,11 @@ class SENSOR:
         self.firstRun = True
 
 
+    def Get_Current_Value(self, i):
+
+        return self.values[i]
+
+
     # stores sensor value in values at index i
     def Get_Value(self, i):
 
@@ -30,7 +35,6 @@ class SENSOR:
     def Get_Is_Robot_Touching_Object(self, i, objName, robotId):
 
         self.values[i] = pyrosim.Get_Contact_Between_Robot_And_Object(robotId, objName, self.name)
-        print(self.values[i])
 
 
     def Get_Joint_Angle(self, i, robotId):
