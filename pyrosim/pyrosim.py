@@ -100,6 +100,10 @@ def Get_Distance_Between(objA, objB):
 
     distance = p.getClosestPoints(bodyA=objA, bodyB=objB, distance=1000)
 
+    if not distance:
+
+        return 1000.0
+
     return distance[0][8]
 
 

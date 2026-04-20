@@ -20,6 +20,11 @@ class SENSOR:
         return self.values[i]
 
 
+    def Get_Values(self):
+
+        return self.values
+
+
     # stores sensor value in values at index i
     def Get_Value(self, i):
 

@@ -30,3 +30,29 @@ class WORLD:
     def Get_Ball_ID(self):
 
         return self.objects[1]
+
+    def Get_Closest_To_Goal_Value(self):
+
+        values = self.goalBallDistanceSensor.Get_Values()
+
+        distance = 1000
+
+        for value in values:
+
+            if value < distance:
+
+                distance = value
+
+        return distance
+
+    def Get_Goal_Scored(self):
+
+        values = self.goalBallDistanceSensor.Get_values()
+
+        for values in values:
+
+            if value == 1.0:
+
+                return 1.0
+
+        return 0.0

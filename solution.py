@@ -11,7 +11,9 @@ class SOLUTION:
 
     def __init__(self, myID):
 
-        self.weights = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
+        #TODO: modify to include hidden neurons
+        self.weightsSH = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
+        self.weightsHM = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
 
         self.myID = myID
 
@@ -344,12 +346,20 @@ class SOLUTION:
     def Create_Brain(self):
         pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
 
+        # creates the hidden neurons
         neuronIndex = 0
         for i in range(c.NUM_SENSOR_NEURONS):
 
             pyrosim.Send_Sensor_Neuron(name = neuronIndex, linkName = f"neuronIndex")
             neuronIndex = neuronIndex + 1
 
+        # creates the hidden neurons
+        for i in range(c.NUM_HIDDEN_NEURONS):
+
+            pyrosim.Send_Hidden_Neuron(name = neuronIndex)
+            neuronIndex = neuronIndex + 1
+
+        # creates the motor neurons
         for i in range(c.NUM_MOTOR_NEURONS):
 
             pyrosim.Send_Motor_Neuron(name = neuronIndex, jointName = self.joints[i])
@@ -357,9 +367,15 @@ class SOLUTION:
 
         for currentRow in range(c.NUM_SENSOR_NEURONS):
 
+            for currentColumn in range(c.NUM_HIDDEN_NEURONS):
+
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight=self.weightsSH[currentRow][currentColumn], type="regular")
+
+        for currentRow in range(c.NUM_HIDDEN_NEURONS):
+
             for currentColumn in range(c.NUM_MOTOR_NEURONS):
 
-                pyrosim.Send_Synapse(sourceNeuronName = currentRow, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight=self.weights[currentRow][currentColumn], type="regular")
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow + c.NUM_SENSOR_NEURONS, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS + c.NUM_HIDDEN_NEURONS, weight=self.weightsHM[currentRow][currentColumn], type="regular")
 
         '''
         # adds sensor neurons to neural network file
@@ -440,10 +456,20 @@ class SOLUTION:
 
     def Mutate(self):
 
-        randomRow = random.randint(0, c.NUM_SENSOR_NEURONS - 1)
-        randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
+        neuronSet = random.random() < 0.5
 
-        self.weights[randomRow][randomColumn] = random.random() * 2 - 1
+        if neuronSet:
+
+            randomRow = random.randint(0, c.NUM_SENSOR_NEURONS - 1)
+            randomColumn = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
+            self.weightsSH[randomRow][randomColumn] = random.random() * 2 - 1
+
+        else:
+
+            randomRow = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
+            randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
+            self.weightsHM[randomRow][randomColumn] = random.random() * 2 - 1
+
 
 
     # gets x, y and theta of fingures put on a unit circle from center of previous link

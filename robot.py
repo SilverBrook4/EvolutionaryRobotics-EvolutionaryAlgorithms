@@ -121,15 +121,17 @@ class ROBOT:
 
 
     # gets the fitness of the robot
-    def Get_Fitness(self, connection):
+    def Get_Fitness(self, connection, distanceToGoal):
 
+        '''
         # gets the x position or fitness of the robot
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
 
         basePosition = basePositionAndOrientation[0]
 
         xPosition = basePosition[0]
+        '''
 
         # use pipe to send fitness to parent program
-        connection.send(xPosition)
+        connection.send(distanceToGoal)
         connection.close()
