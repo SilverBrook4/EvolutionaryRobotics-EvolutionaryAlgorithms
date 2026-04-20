@@ -80,6 +80,14 @@ def Get_Contact_Between_Objects(objA, objB):
 
         touchValue = 1.0
 
+def Get_Contact_Between_Robot_And_Object(robotId, obj, link):
+
+    touchValue = -1.0
+
+    if p.getContactPoints(bodyA=robotId, bodyB=obj, linkIndexA=link):
+
+        touchValue = 1.0
+
     return touchValue
 
 def Get_Joint_Angle(robotId, joint):
@@ -87,47 +95,6 @@ def Get_Joint_Angle(robotId, joint):
     jointIndex = jointNamesToIndices[joint]
     jointState = p.getJointState(robotId, jointIndex)
     return jointState[0]
-
-# TODO:
-def Get_Contact_Sensor_Value_For_Top(objA, objB, robotId):
-
-    result = -1.0
-
-    contactPoints = p.getContactPoints(bodyA=objA, bodyB=objB)
-
-    if contactPoints == None:
-
-        return result
-    else:
-
-        print("contact")
-
-    # get object A's orientation
-    objStateA = p.getLinkState(robotId, objA)
-    objOrientationA = objStateA[1] # quaternion
-
-    # make ration matrix from supplied quaternion
-    rotationMatrixA = np.array(p.getMatrixFromQuaternion(objOrientationA)).reshape(3, 3)
-
-    for contact in contactPoints:
-
-        linkHit = contact[3]
-        normal = np.array(contact[7])
-
-        print(f"{linkHit} == {objA}")
-
-        if linkHit == objA:
-
-            print("Palm Hit")
-
-            localNormal = rotationMatrixA.T @ normal
-
-            if (localNormal[2] > 0.9):
-                print("PalmHitUpright")
-                result = 1.0
-                return result
-
-    return result
 
 def Get_Distance_Between(objA, objB):
 

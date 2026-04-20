@@ -187,6 +187,56 @@ class SOLUTION:
 
         pyrosim.Send_Cube(name="Palm", pos=[x, y, z], size=[length, width, height])
 
+        # ----- Palm Sensor Pads -----
+
+        pyrosim.Send_Joint(name="Palm_Q1", parent="Palm", child="Q1", type="fixed", position=[0.166,0.125,0], jointAxis="1 0 0")
+
+        length = 0.2
+        width = 0.2
+        height = 0.05
+
+        x = 0
+        y = 0
+        z = 0.08
+
+        pyrosim.Send_Cube(name="Q1", pos=[x, y, z], size=[length, width, height])
+
+        pyrosim.Send_Joint(name="Palm_Q2", parent="Palm", child="Q2", type="fixed", position=[0.333,0.125,0], jointAxis="1 0 0")
+
+        length = 0.2
+        width = 0.2
+        height = 0.05
+
+        x = 0
+        y = 0
+        z = 0.08
+
+        pyrosim.Send_Cube(name="Q2", pos=[x, y, z], size=[length, width, height])
+
+        pyrosim.Send_Joint(name="Palm_Q3", parent="Palm", child="Q3", type="fixed", position=[0.166,-0.125,0], jointAxis="1 0 0")
+
+        length = 0.2
+        width = 0.2
+        height = 0.05
+
+        x = 0
+        y = 0
+        z = 0.08
+
+        pyrosim.Send_Cube(name="Q3", pos=[x, y, z], size=[length, width, height])
+
+        pyrosim.Send_Joint(name="Palm_Q4", parent="Palm", child="Q4", type="fixed", position=[0.333,-0.125,0], jointAxis="1 0 0")
+
+        length = 0.2
+        width = 0.2
+        height = 0.05
+
+        x = 0
+        y = 0
+        z = 0.08
+
+        pyrosim.Send_Cube(name="Q4", pos=[x, y, z], size=[length, width, height])
+
         # ----- Left Fingure -----
         # joint Palm and LeftFingureBase
         pyrosim.Send_Joint(name="Palm_LeftFingureBase", parent="Palm", child="LeftFingureBase", type="revolute", position=[0.4,0.2,0.1], jointAxis="0 1 0")

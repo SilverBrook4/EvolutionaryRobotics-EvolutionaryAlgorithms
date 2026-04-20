@@ -27,12 +27,10 @@ class SENSOR:
         self.values[i] = pyrosim.Get_Contact_Between_Objects(self.name, objName)
 
 
-    # senses if object is on top of link sensor
-    def Get_Is_On_Top_Off(self, i, robotId, objName):
+    def Get_Is_Robot_Touching_Object(self, i, objName, robotId):
 
-        self.values[i] = pyrosim.Get_Contact_Sensor_Value_For_Top(self.name, objName, robotId)
-        if self.values[i] == 1.0:
-            print(self.values[i])
+        self.values[i] = pyrosim.Get_Contact_Between_Robot_And_Object(robotId, objName, self.name)
+        print(self.values[i])
 
 
     def Get_Joint_Angle(self, i, robotId):
@@ -53,7 +51,6 @@ class SENSOR:
     def Get_Distance_To(self, i, obj):
 
         self.values[i] = pyrosim.Get_Distance_Between(self.name, obj)
-        print(self.values[i])
 
     # saves sensor input to disk
     def Save_Values(self):

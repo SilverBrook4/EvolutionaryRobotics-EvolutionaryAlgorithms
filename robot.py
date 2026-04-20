@@ -42,11 +42,19 @@ class ROBOT:
 
             self.jointSensors[joint] = SENSOR(joint)
 
-        # create palm sensor
-        palmIndex = pyrosim.linkNamesToIndices["Palm"]
-        self.palmSensor = SENSOR(palmIndex)
-
         self.palmLocationSensor = SENSOR("Palm")
+
+        jointIndex = pyrosim.linkNamesToIndices["Q1"]
+        self.palmTouchSensorQ1 = SENSOR(jointIndex)
+
+        jointIndex = pyrosim.linkNamesToIndices["Q2"]
+        self.palmTouchSensorQ2 = SENSOR(jointIndex)
+
+        jointIndex = pyrosim.linkNamesToIndices["Q3"]
+        self.palmTouchSensorQ3 = SENSOR(jointIndex)
+
+        jointIndex = pyrosim.linkNamesToIndices["Q4"]
+        self.palmTouchSensorQ4 = SENSOR(jointIndex)
 
 
     # get and store sensor data for robot object
@@ -58,9 +66,10 @@ class ROBOT:
 
         self.palmLocationSensor.Get_Link_Position(i, self.robotId)
 
-        # TODO: Make this work
-        # sense if ball is in hand palm
-        #self.palmSensor.Get_Is_On_Top_Off(i, self.robotId, ballId)
+        self.palmTouchSensorQ1.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        self.palmTouchSensorQ2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        self.palmTouchSensorQ3.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        self.palmTouchSensorQ4.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
 
 
     # prepare motors at each joint
