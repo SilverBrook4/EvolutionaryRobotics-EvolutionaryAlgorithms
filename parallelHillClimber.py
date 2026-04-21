@@ -94,7 +94,7 @@ class PARALLEL_HILL_CLIMBER:
 
         for key in range(c.POPULATION_SIZE):
 
-            if (self.parents[key].fitness > self.children[key].fitness):
+            if (self.parents[key].fitness < self.children[key].fitness):
 
                 self.children[key].process = None
                 self.children[key].parent_connection = None

@@ -4,10 +4,12 @@ import os
 
 def Run(directOrGUI, solutionID, connection, supressMessages):
 
-    # TODO: implement message suppression
     if supressMessages:
 
-        pass
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+        os.dup2(devnull, sys.stderr.fileno())
+        os.close(devnull)
 
     simulation = SIMULATION(directOrGUI, solutionID)
 

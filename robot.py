@@ -118,6 +118,12 @@ class ROBOT:
         self.fingureSensorR2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
         currentSensorValues.append(self.fingureSensorR2.Get_Current_Value(i))
 
+        # get thumb touch values
+        self.fingureSensorT1.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.fingureSensorT1.Get_Current_Value(i))
+        self.fingureSensorT2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.fingureSensorT2.Get_Current_Value(i))
+
         return currentSensorValues
 
 
@@ -181,6 +187,39 @@ class ROBOT:
 
                 timeInHand = timeInHand + 1
 
+        # get time touching left fingure
+        valuesL1 = self.fingureSensorL1.Get_Values()
+        valuesL2 = self.fingureSensorL2.Get_Values()
+
+        timeOnLeftFingure = 0
+        for i in range(c.NUM_SIM_STEPS):
+
+            if (valuesL1[i] == 1.0) or (valuesL2[i] == 1.0):
+
+                timeOnLeftFingure = timeOnLeftFingure + 1
+
+        # get time touching right fingure
+        valuesR1 = self.fingureSensorR1.Get_Values()
+        valuesR2 = self.fingureSensorR2.Get_Values()
+
+        timeOnRightFingure = 0
+        for i in range(c.NUM_SIM_STEPS):
+
+            if (valuesR1[i] == 1.0) or (valuesR2[i] == 1.0):
+
+                timeOnRightFingure = timeOnRightFingure + 1
+
+        # get time touching thumb
+        valuesT1 = self.fingureSensorT1.Get_Values()
+        valuesT2 = self.fingureSensorT2.Get_Values()
+
+        timeOnThumb = 0
+        for i in range(c.NUM_SIM_STEPS):
+
+            if (valuesT1[i] == 1.0) or (valuesT2[i] == 1.0):
+
+                timeOnThumb = timeOnThumb + 1
+
         # gets time before the ball touches the ground
         timeBeforeGroundContact = 0
         for i in range(c.NUM_SIM_STEPS):
@@ -191,7 +230,7 @@ class ROBOT:
 
 
         # get fitness
-        fitness = timeInHand + timeBeforeGroundContact
+        fitness = timeInHand + timeOnThumb + timeOnLeftFingure + timeOnRightFingure
 
         # use pipe to send fitness to parent program
         connection.send(fitness)
