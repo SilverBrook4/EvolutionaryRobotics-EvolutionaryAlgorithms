@@ -503,7 +503,7 @@ class SOLUTION:
 
 
     # staerts simulation
-    def Start_Simulation(self, directOrGUI, saveRobot=False):
+    def Start_Simulation(self, directOrGUI):
 
         # creates the files for the world, robot, and robots brain to run in the physics engine
         self.Create_World()
@@ -512,7 +512,7 @@ class SOLUTION:
 
         # TODO: write output to a file or supress
         # runs simulate.py
-        self.process = Process(target=Run, args=(directOrGUI, self.myID, self.child_connection, c.SUPPRESS_PYBULLET_MESSAGES, saveRobot))
+        self.process = Process(target=Run, args=(directOrGUI, self.myID, self.child_connection, c.SUPPRESS_PYBULLET_MESSAGES))
         self.process.start()
         # os.system(f"python3 simulate.py {directOrGUI} {self.myID} {str(self.writePipe)} 2&>1 &")
         # os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")

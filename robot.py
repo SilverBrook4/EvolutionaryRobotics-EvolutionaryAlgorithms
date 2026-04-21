@@ -9,7 +9,7 @@ import os
 class ROBOT:
 
     # class constructor
-    def __init__(self, solutionID, saveRobot):
+    def __init__(self, solutionID):
 
         # loads robot from body.urdf
         self.robotId = p.loadURDF(f"body{solutionID}.urdf")
@@ -26,12 +26,10 @@ class ROBOT:
 
         # prepares motors to move
         self.Prepare_To_Act()
-
-        if not saveRobot:
-
-            # cleans up brain files
-            os.system(f"rm brain{self.myID}.nndf")
-            os.system(f"rm body{self.myID}.urdf")
+        
+        # cleans up brain files
+        os.system(f"rm brain{self.myID}.nndf")
+        os.system(f"rm body{self.myID}.urdf")
 
 
     # prepares sensors for every link
