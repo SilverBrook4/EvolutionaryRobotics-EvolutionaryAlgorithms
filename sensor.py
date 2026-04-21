@@ -57,6 +57,16 @@ class SENSOR:
         self.values[i] = [x, y, z]
 
 
+    def Get_Object_Position(self, i):
+
+        if self.firstRun:
+
+            self.values = np.zeros((c.NUM_SIM_STEPS, 3))
+
+        x, y, z = pyrosim.Get_Object_Position(self.name)
+        self.values[i] = [x, y, z]
+
+
     def Get_Distance_To(self, i, obj):
 
         self.values[i] = pyrosim.Get_Distance_Between(self.name, obj)

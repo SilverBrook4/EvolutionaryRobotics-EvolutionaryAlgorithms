@@ -9,7 +9,7 @@ import time
 class SIMULATION:
 
     # class constructor
-    def __init__(self, directOrGUI, solutionID):
+    def __init__(self, directOrGUI, solutionID, saveRobot):
 
         # connects to physics client
         if (directOrGUI == "DIRECT"):
@@ -33,7 +33,7 @@ class SIMULATION:
         # sets physics client gravity 
         p.setGravity(0, 0, -9.8, self.physicsClient)
 
-        self.world = WORLD(solutionID)
+        self.world = WORLD(solutionID, saveRobot)
         self.robot = ROBOT(solutionID)
 
 
@@ -75,5 +75,6 @@ class SIMULATION:
 
         ballOnGround = self.world.Get_Ball_On_Ground_Values()
         closestsDistanceToGoal = self.world.Get_Closest_To_Goal_Value()
+        ballPosition = self.world.Get_Ball_Position_Values()
 
-        self.robot.Get_Fitness(connection, closestsDistanceToGoal, ballOnGround)
+        self.robot.Get_Fitness(connection, closestsDistanceToGoal, ballOnGround, ballPosition)

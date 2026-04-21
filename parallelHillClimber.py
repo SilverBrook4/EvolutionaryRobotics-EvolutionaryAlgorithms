@@ -81,7 +81,7 @@ class PARALLEL_HILL_CLIMBER:
         # starts simulation of solutions
         for solution in solutions:
 
-            solutions[solution].Start_Simulation("DIRECT")
+            solutions[solution].Start_Simulation("DIRECT", saveRobot=False)
 
         # end parent simulations
         for solution in solutions:
@@ -130,4 +130,4 @@ class PARALLEL_HILL_CLIMBER:
         self.parents[bestSolution].Set_Pipes()
 
         print(f"Best Fitness Found: {self.parents[bestSolution].fitness}")
-        self.parents[bestSolution].Start_Simulation("GUI")
+        self.parents[bestSolution].Start_Simulation("GUI", saveRobot=True)

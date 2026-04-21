@@ -9,7 +9,7 @@ import os
 class ROBOT:
 
     # class constructor
-    def __init__(self, solutionID):
+    def __init__(self, solutionID, saveRobot):
 
         # loads robot from body.urdf
         self.robotId = p.loadURDF(f"body{solutionID}.urdf")
@@ -27,9 +27,11 @@ class ROBOT:
         # prepares motors to move
         self.Prepare_To_Act()
 
-        # cleans up brain files
-        os.system(f"rm brain{self.myID}.nndf")
-        os.system(f"rm body{self.myID}.urdf")
+        if not saveRobot:
+
+            # cleans up brain files
+            os.system(f"rm brain{self.myID}.nndf")
+            os.system(f"rm body{self.myID}.urdf")
 
 
     # prepares sensors for every link
@@ -163,7 +165,7 @@ class ROBOT:
 
 
     # gets the fitness of the robot
-    def Get_Fitness(self, connection, distanceToGoal, ballOnGround):
+    def Get_Fitness(self, connection, distanceToGoal, ballOnGround, ballPosition):
 
         '''
         # gets the x position or fitness of the robot
@@ -204,12 +206,15 @@ class ROBOT:
 
         timeInL1 = 0
         timeInL2 = 0
+        timeInL = 0
 
         timeInR1 = 0
         timeInR2 = 0
+        timeInR = 0
 
         timeInT1 = 0
         timeInT2 = 0
+        timeInT = 0
 
         whenBallTouchesGround = c.NUM_SIM_STEPS
         groundTouched = False
@@ -260,6 +265,21 @@ class ROBOT:
 
                 timeInT2 += 4
 
+            # checks if fingures are tocuhing ball at same time
+            if valuesL1[i] == 1.0 and valuesL2[i] == 1.0:
+
+                timeInL += 1
+
+            if valuesR1[i] == 1.0 and valuesR2[i] == 1.0:
+
+                timeInR += 1
+
+            if valuesT1[i] == 1.0 and valuesT2[i] == 1.0:
+
+                timeInT += 1
+
+
+
             # gets timestep the ball touches the ground at
             if (ballOnGround[i] == 1.0) and not(groundTouched):
 
@@ -271,6 +291,7 @@ class ROBOT:
 
                 whenBallTouchesHand = i
 
+        # TODO: Pelalize hand for touching ground
 
         # get fitness
         phase0 = whenBallTouchesHand
@@ -278,12 +299,12 @@ class ROBOT:
         fitness = -9999999.9
         if whenBallTouchesGround < phase0:
 
-            fitness = 0 - (np.abs(palmPos[0]) * np.abs(palmPos[1]) * np.abs(palmPos[2])) 
+            fitness = 100 / (np.abs(palmPos[0]) * np.abs(palmPos[1]) * np.abs(palmPos[2])) 
 
         elif whenBallTouchesGround >= phase0:
 
-            fitness = ((timeInQ1 * timeInQ2 * timeInQ3 * timeInQ4) / 4) + \
-                (timeInL1 * timeInL2) * (timeInR1 * timeInR2) * (timeInT1 * timeInT2)
+            fitness = ((timeInQ1 * timeInQ2 * timeInQ3 * timeInQ4) / 10) + \
+                (timeInL1 * timeInL2) + (timeInR1 * timeInR2) + (timeInT1 * timeInT2)
 
         # use pipe to send fitness to parent program
         connection.send(fitness)

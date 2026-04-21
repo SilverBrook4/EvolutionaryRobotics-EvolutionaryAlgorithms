@@ -18,12 +18,14 @@ class WORLD:
         self.goalSensor = SENSOR(self.objects[0])
         self.ballSensor = SENSOR(self.objects[1])
         self.goalBallDistanceSensor = SENSOR(self.objects[0])
+        self.ballPositionSensor = SENSOR(self.objects[1])
 
     def Sense(self, i):
 
         self.goalSensor.Get_Is_Touching_Object(i, self.objects[1])
         self.ballSensor.Get_Is_Touching_Object(i, self.planeId)
         self.goalBallDistanceSensor.Get_Distance_To(i, self.objects[1])
+        self.ballPositionSensor.Get_Object_Position(i)
 
         return self.goalBallDistanceSensor.Get_Current_Value(i)
 
@@ -34,6 +36,10 @@ class WORLD:
     def Get_Ball_On_Ground_Values(self):
 
         return self.ballSensor.Get_Values()
+
+    def Get_Ball_Position_Values(self):
+
+        return self.ballPositionSensor.Get_Values()
 
     def Get_Closest_To_Goal_Value(self):
 

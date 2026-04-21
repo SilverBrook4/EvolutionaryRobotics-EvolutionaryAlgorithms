@@ -3,7 +3,7 @@ import numpy
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 30 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 50 # the number of generations that will be evolved
 
 POPULATION_SIZE = 15 # number of nn's in a population
 #----------------------------------------------------
@@ -24,7 +24,7 @@ SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra 
 # Sets Neural Network Values
 NUM_SENSOR_NEURONS = 30 # number of sensor neurons
 
-NUM_HIDDEN_NEURONS = 3 # number of hidden neurons
+NUM_HIDDEN_NEURONS = 5 # number of hidden neurons
 
 NUM_MOTOR_NEURONS = 13 # number of motor neurons
 

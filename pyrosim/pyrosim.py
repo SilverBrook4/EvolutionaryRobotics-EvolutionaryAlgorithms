@@ -65,6 +65,12 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
 
     return touchValue
 
+def Get_Object_Position(obj):
+
+    position, orientation = p.getBasePositionAndOrientation(obj)
+
+    return position
+
 def Get_Link_Position(robotId, link):
 
     linkIndex = linkNamesToIndices[link]

@@ -2,7 +2,7 @@ from simulation import SIMULATION
 import sys
 import os
 
-def Run(directOrGUI, solutionID, connection, supressMessages):
+def Run(directOrGUI, solutionID, connection, supressMessages, saveRobot=False):
 
     if supressMessages:
 
@@ -11,7 +11,7 @@ def Run(directOrGUI, solutionID, connection, supressMessages):
         os.dup2(devnull, sys.stderr.fileno())
         os.close(devnull)
 
-    simulation = SIMULATION(directOrGUI, solutionID)
+    simulation = SIMULATION(directOrGUI, solutionID, saveRobot)
 
     simulation.Run()
 
