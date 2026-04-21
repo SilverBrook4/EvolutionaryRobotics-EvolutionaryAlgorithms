@@ -174,63 +174,116 @@ class ROBOT:
         xPosition = basePosition[0]
         '''
 
-        # gets the time the ball spends contacting the hand
+        # gets balls hand touch values
         valuesQ1 = self.palmTouchSensorQ1.Get_Values()
         valuesQ2 = self.palmTouchSensorQ2.Get_Values()
         valuesQ3 = self.palmTouchSensorQ3.Get_Values()
         valuesQ4 = self.palmTouchSensorQ4.Get_Values()
 
-        timeInHand = 0
-        for i in range(c.NUM_SIM_STEPS):
-
-            if (valuesQ1[i] == 1.0) or (valuesQ2[i] == 1.0) or (valuesQ3[i] == 1.0) or (valuesQ4[i] == 1.0):
-
-                timeInHand = timeInHand + 1
-
-        # get time touching left fingure
+        # get time left fingrue touch values
         valuesL1 = self.fingureSensorL1.Get_Values()
         valuesL2 = self.fingureSensorL2.Get_Values()
 
-        timeOnLeftFingure = 0
-        for i in range(c.NUM_SIM_STEPS):
-
-            if (valuesL1[i] == 1.0) or (valuesL2[i] == 1.0):
-
-                timeOnLeftFingure = timeOnLeftFingure + 1
-
-        # get time touching right fingure
+        # get touch values for right fingure
         valuesR1 = self.fingureSensorR1.Get_Values()
         valuesR2 = self.fingureSensorR2.Get_Values()
 
-        timeOnRightFingure = 0
-        for i in range(c.NUM_SIM_STEPS):
-
-            if (valuesR1[i] == 1.0) or (valuesR2[i] == 1.0):
-
-                timeOnRightFingure = timeOnRightFingure + 1
-
-        # get time touching thumb
+        # get touch values for the thumb
         valuesT1 = self.fingureSensorT1.Get_Values()
         valuesT2 = self.fingureSensorT2.Get_Values()
 
-        timeOnThumb = 0
+        # gets locations of palm
+        palmPos = self.palmLocationSensor.Get_Values()
+
+        timeInQ1 = 0
+        timeInQ2 = 0
+        timeInQ3 = 0
+        timeInQ4 = 0
+
+        whenBallTouchesHand = 0
+
+        timeInL1 = 0
+        timeInL2 = 0
+
+        timeInR1 = 0
+        timeInR2 = 0
+
+        timeInT1 = 0
+        timeInT2 = 0
+
+        whenBallTouchesGround = c.NUM_SIM_STEPS
+        groundTouched = False
+
         for i in range(c.NUM_SIM_STEPS):
 
-            if (valuesT1[i] == 1.0) or (valuesT2[i] == 1.0):
+            # sums time spent in each hand quadrent
+            if valuesQ1[i] == 1.0:
 
-                timeOnThumb = timeOnThumb + 1
+                timeInQ1 += 1
 
-        # gets time before the ball touches the ground
-        timeBeforeGroundContact = 0
-        for i in range(c.NUM_SIM_STEPS):
+            if valuesQ2[i] == 1.0:
 
-            if ballOnGround[i] == -1.0:
+                timeInQ2 += 1
 
-                timeBeforeGroundContact = timeBeforeGroundContact + 1
+            if valuesQ3[i] == 1.0:
+
+                timeInQ3 += 1
+
+            if valuesQ4[i] == 1.0:
+
+                timeInQ4 += 1
+
+            # sum time spent touching each part of left fingure
+            if valuesL1[i] == 1.0:
+
+                timeInL1 += 1
+
+            if valuesL2[i] == 1.0:
+
+                timeInL2 += 4
+
+            # sum time spent touching right fingure
+            if valuesR1[i] == 1.0:
+
+                timeInR1 += 1
+
+            if valuesR2[i] == 1.0:
+
+                timeInR2 += 4
+
+            # sum time spent touching right fingure
+            if valuesT1[i] == 1.0:
+
+                timeInT1 += 1
+
+            if valuesT2[i] == 1.0:
+
+                timeInT2 += 4
+
+            # gets timestep the ball touches the ground at
+            if (ballOnGround[i] == 1.0) and not(groundTouched):
+
+                whenBallTouchesGround = i
+                groundTouched = True
+
+            # gets timestep ball touches hand
+            if (whenBallTouchesHand == 0) and ((timeInQ1 + timeInQ2 + timeInQ3 + timeInQ4) > 0):
+
+                whenBallTouchesHand = i
 
 
         # get fitness
-        fitness = timeInHand + timeOnThumb + timeOnLeftFingure + timeOnRightFingure
+        phase0 = whenBallTouchesHand
+        phase1 = 0
+        fitness = -9999999.9
+        if whenBallTouchesGround < phase0:
+
+            fitness = 0 - (np.abs(palmPos[0]) * np.abs(palmPos[1]) * np.abs(palmPos[2])) 
+
+        elif whenBallTouchesGround >= phase0:
+
+            fitness = ((timeInQ1 * timeInQ2 * timeInQ3 * timeInQ4) / 4) + \
+                (timeInL1 * timeInL2) * (timeInR1 * timeInR2) * (timeInT1 * timeInT2)
 
         # use pipe to send fitness to parent program
         connection.send(fitness)
