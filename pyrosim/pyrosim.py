@@ -80,6 +80,8 @@ def Get_Contact_Between_Objects(objA, objB):
 
         touchValue = 1.0
 
+    return touchValue
+
 def Get_Contact_Between_Robot_And_Object(robotId, obj, link):
 
     touchValue = -1.0

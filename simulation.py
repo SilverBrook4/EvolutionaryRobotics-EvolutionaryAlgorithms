@@ -73,4 +73,7 @@ class SIMULATION:
     # evaluates the fitness of a specific robot
     def Get_Fitness(self, connection):
 
-        self.robot.Get_Fitness(connection, self.world.Get_Closest_To_Goal_Value())
+        ballOnGround = self.world.Get_Ball_On_Ground_Values()
+        closestsDistanceToGoal = self.world.Get_Closest_To_Goal_Value()
+
+        self.robot.Get_Fitness(connection, closestsDistanceToGoal, ballOnGround)

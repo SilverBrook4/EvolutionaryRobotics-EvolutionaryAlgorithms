@@ -31,6 +31,10 @@ class WORLD:
 
         return self.objects[1]
 
+    def Get_Ball_On_Ground_Values(self):
+
+        return self.ballSensor.Get_Values()
+
     def Get_Closest_To_Goal_Value(self):
 
         values = self.goalBallDistanceSensor.Get_Values()
@@ -47,7 +51,7 @@ class WORLD:
 
     def Get_Goal_Scored(self):
 
-        values = self.goalBallDistanceSensor.Get_values()
+        values = self.goalBallDistanceSensor.Get_Values()
 
         for values in values:
 

@@ -44,6 +44,7 @@ class ROBOT:
 
         self.palmLocationSensor = SENSOR("Palm")
 
+        # create palm touch sensors
         jointIndex = pyrosim.linkNamesToIndices["Q1"]
         self.palmTouchSensorQ1 = SENSOR(jointIndex)
 
@@ -55,6 +56,28 @@ class ROBOT:
 
         jointIndex = pyrosim.linkNamesToIndices["Q4"]
         self.palmTouchSensorQ4 = SENSOR(jointIndex)
+
+        # create left fingure touch sensors
+        jointIndex = pyrosim.linkNamesToIndices["L1"]
+        self.fingureSensorL1 = SENSOR(jointIndex)
+
+        jointIndex = pyrosim.linkNamesToIndices["L2"]
+        self.fingureSensorL2 = SENSOR(jointIndex)
+
+        # create rigth fingure touch sensors
+        jointIndex = pyrosim.linkNamesToIndices["R1"]
+        self.fingureSensorR1 = SENSOR(jointIndex)
+
+        jointIndex = pyrosim.linkNamesToIndices["R2"]
+        self.fingureSensorR2 = SENSOR(jointIndex)
+
+        # create thumb touch sensors
+        jointIndex = pyrosim.linkNamesToIndices["T1"]
+        self.fingureSensorT1 = SENSOR(jointIndex)
+
+        jointIndex = pyrosim.linkNamesToIndices["T2"]
+        self.fingureSensorT2 = SENSOR(jointIndex)
+
 
 
     # get and store sensor data for robot object
@@ -73,6 +96,7 @@ class ROBOT:
         currentSensorValues.append(pos[1])
         currentSensorValues.append(pos[2])
 
+        # gets palm touch values
         self.palmTouchSensorQ1.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
         currentSensorValues.append(self.palmTouchSensorQ1.Get_Current_Value(i))
         self.palmTouchSensorQ2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
@@ -81,6 +105,18 @@ class ROBOT:
         currentSensorValues.append(self.palmTouchSensorQ3.Get_Current_Value(i))
         self.palmTouchSensorQ4.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
         currentSensorValues.append(self.palmTouchSensorQ4.Get_Current_Value(i))
+
+        # gets left fingure touch values
+        self.fingureSensorL1.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.fingureSensorL1.Get_Current_Value(i))
+        self.fingureSensorL2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.fingureSensorL2.Get_Current_Value(i))
+
+        # get right fingure touch values
+        self.fingureSensorR1.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.fingureSensorR1.Get_Current_Value(i))
+        self.fingureSensorR2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
+        currentSensorValues.append(self.fingureSensorR2.Get_Current_Value(i))
 
         return currentSensorValues
 
@@ -121,7 +157,7 @@ class ROBOT:
 
 
     # gets the fitness of the robot
-    def Get_Fitness(self, connection, distanceToGoal):
+    def Get_Fitness(self, connection, distanceToGoal, ballOnGround):
 
         '''
         # gets the x position or fitness of the robot
@@ -132,6 +168,31 @@ class ROBOT:
         xPosition = basePosition[0]
         '''
 
+        # gets the time the ball spends contacting the hand
+        valuesQ1 = self.palmTouchSensorQ1.Get_Values()
+        valuesQ2 = self.palmTouchSensorQ2.Get_Values()
+        valuesQ3 = self.palmTouchSensorQ3.Get_Values()
+        valuesQ4 = self.palmTouchSensorQ4.Get_Values()
+
+        timeInHand = 0
+        for i in range(c.NUM_SIM_STEPS):
+
+            if (valuesQ1[i] == 1.0) or (valuesQ2[i] == 1.0) or (valuesQ3[i] == 1.0) or (valuesQ4[i] == 1.0):
+
+                timeInHand = timeInHand + 1
+
+        # gets time before the ball touches the ground
+        timeBeforeGroundContact = 0
+        for i in range(c.NUM_SIM_STEPS):
+
+            if ballOnGround[i] == -1.0:
+
+                timeBeforeGroundContact = timeBeforeGroundContact + 1
+
+
+        # get fitness
+        fitness = timeInHand + timeBeforeGroundContact
+
         # use pipe to send fitness to parent program
-        connection.send(distanceToGoal)
+        connection.send(fitness)
         connection.close()

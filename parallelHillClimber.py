@@ -123,7 +123,7 @@ class PARALLEL_HILL_CLIMBER:
 
         for solution in range(1, c.POPULATION_SIZE):
 
-            if (self.parents[bestSolution].fitness > self.parents[solution].fitness):
+            if (self.parents[bestSolution].fitness < self.parents[solution].fitness):
 
                 bestSolution = solution
 

@@ -5,11 +5,11 @@ import numpy
 # Set Evolution Values
 NUMBER_OF_GENERATIONS = 10 # the number of generations that will be evolved
 
-POPULATION_SIZE = 10 # number of nn's in a population
+POPULATION_SIZE = 20 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 1000 # sets number of simulation steps
+NUM_SIM_STEPS = 500 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 
@@ -22,7 +22,7 @@ SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra 
 #----------------------------------------------------
 
 # Sets Neural Network Values
-NUM_SENSOR_NEURONS = 24 # number of sensor neurons
+NUM_SENSOR_NEURONS = 30 # number of sensor neurons
 
 NUM_HIDDEN_NEURONS = 3 # number of hidden neurons
 
