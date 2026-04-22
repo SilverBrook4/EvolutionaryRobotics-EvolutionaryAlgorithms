@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 
 #----------------------------------------------------
 
@@ -28,17 +28,19 @@ NUM_HIDDEN_NEURONS = 5 # number of hidden neurons
 
 NUM_MOTOR_NEURONS = 13 # number of motor neurons
 
+FITNESS_THRESHOLD = 0.3
+
 #----------------------------------------------------
 
-MAX_MOTOR_FORCE = 700
+MAX_MOTOR_FORCE = 1000
 
 #----------------------------------------------------
 
 # Set leg Values
-AMPLITUDE = numpy.pi / 4
+AMPLITUDE = np.pi / 4
 
 FREQUENCY = 10
 
 PHASE_OFFSET = 0
 
-MOTOR_JOINT_RANGE = 0.7
+MOTOR_JOINT_RANGE = np.pi / 2

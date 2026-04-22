@@ -531,17 +531,26 @@ class SOLUTION:
 
         neuronSet = random.random() < 0.5
 
-        if neuronSet:
+        if self.fitness > c.FITNESS_THRESHOLD:
 
-            randomRow = random.randint(0, c.NUM_SENSOR_NEURONS - 1)
-            randomColumn = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
-            self.weightsSH[randomRow][randomColumn] = random.random() * 2 - 1
+            if neuronSet:
+
+                randomRow = random.randint(0, c.NUM_SENSOR_NEURONS - 1)
+                randomColumn = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
+                self.weightsSH[randomRow][randomColumn] = random.random() * 2 - 1
+
+            else:
+
+                randomRow = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
+                randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
+                self.weightsHM[randomRow][randomColumn] = random.random() * 2 - 1
 
         else:
 
-            randomRow = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
-            randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
-            self.weightsHM[randomRow][randomColumn] = random.random() * 2 - 1
+            self.weightsSH = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
+            self.weightsHM = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
+
+
 
 
 

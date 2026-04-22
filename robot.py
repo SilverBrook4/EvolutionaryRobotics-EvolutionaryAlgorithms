@@ -4,6 +4,7 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 from sensor import SENSOR
 from motor import MOTOR
 import constants as c
+import numpy as np
 import os
 
 class ROBOT:
@@ -78,10 +79,19 @@ class ROBOT:
         jointIndex = pyrosim.linkNamesToIndices["T2"]
         self.fingureSensorT2 = SENSOR(jointIndex)
 
+        # TODO: create sensors to sense if hand is touching ground
+        self.armToGroundSensors = {}
+        for link in pyrosim.linkNamesToIndices:
+
+            linkIndex = pyrosim.linkNamesToIndices[link]
+
+            if linkIndex >= 0:
+
+                self.armToGroundSensors[linkIndex] = SENSOR(linkIndex)
 
 
     # get and store sensor data for robot object
-    def Sense(self, i, ballId):
+    def Sense(self, i, ballId, floorId):
 
         currentSensorValues = []
 
@@ -124,7 +134,13 @@ class ROBOT:
         self.fingureSensorT2.Get_Is_Robot_Touching_Object(i, ballId, self.robotId)
         currentSensorValues.append(self.fingureSensorT2.Get_Current_Value(i))
 
+        # sense if any link has touched ground
+        for sensor in self.armToGroundSensors.values():
+
+            sensor.Get_Is_Robot_Touching_Object(i, floorId, self.robotId)
+
         return currentSensorValues
+
 
 
     # prepare motors at each joint
@@ -163,7 +179,7 @@ class ROBOT:
 
 
     # gets the fitness of the robot
-    def Get_Fitness(self, connection, distanceToGoal, ballOnGround, ballPosition):
+    def Get_Fitness(self, connection, distanceToGoal, ballOnGround, ballPos):
 
         '''
         # gets the x position or fitness of the robot
@@ -200,7 +216,8 @@ class ROBOT:
         timeInQ3 = 0
         timeInQ4 = 0
 
-        whenBallTouchesHand = 0
+        whenBallTouchesHand = c.NUM_SIM_STEPS - 1
+        touchedHand = False
 
         timeInL1 = 0
         timeInL2 = 0
@@ -216,6 +233,8 @@ class ROBOT:
 
         whenBallTouchesGround = c.NUM_SIM_STEPS
         groundTouched = False
+
+        timeTouchingGround = 1
 
         for i in range(c.NUM_SIM_STEPS):
 
@@ -276,8 +295,6 @@ class ROBOT:
 
                 timeInT += 1
 
-
-
             # gets timestep the ball touches the ground at
             if (ballOnGround[i] == 1.0) and not(groundTouched):
 
@@ -285,25 +302,47 @@ class ROBOT:
                 groundTouched = True
 
             # gets timestep ball touches hand
-            if (whenBallTouchesHand == 0) and ((timeInQ1 + timeInQ2 + timeInQ3 + timeInQ4) > 0):
+            if not(touchedHand) and ((timeInQ1 + timeInQ2 + timeInQ3 + timeInQ4) > 0):
 
                 whenBallTouchesHand = i
+                touchedHand = True
+
+            for sensor in self.armToGroundSensors.values():
+
+                if sensor.Get_Current_Value(i) == 1.0:
+
+                    timeTouchingGround += 1
 
         # TODO: Pelalize hand for touching ground
 
-        # get fitness
         phase0 = whenBallTouchesHand
         phase1 = 0
         fitness = -9999999.9
-        if whenBallTouchesGround < phase0:
+        if whenBallTouchesGround < whenBallTouchesHand:
 
-            fitness = 100 / (np.abs(palmPos[0]) * np.abs(palmPos[1]) * np.abs(palmPos[2])) 
+            print("phase 0")
+            stability = 1.0 / (1.0 + np.linalg.norm(np.array(palmPos[whenBallTouchesHand]) - np.array(palmPos[0])))
+            proximity = (1.0 / (np.linalg.norm(np.array(palmPos) - np.array(ballPos)) + 1.0))
+
+            fitness = (stability * proximity) / timeTouchingGround
+            #fitness = 100 / ((palmPos[whenBallTouchesGround][0] - ballPos[whenBallTouchesGround][0]) * (palmPos[whenBallTouchesGround][1] - ballPos[whenBallTouchesGround][1]) * (palmPos[whenBallTouchesGround][2] - ballPos[whenBallTouchesGround][2]) + 1)
+            #fitness = 100 / (np.abs(palmPos[0][0] - palmPos[phase0][0]) * np.abs(palmPos[0][1] - palmPos[phase0][1]) * np.abs(palmPos[0][2] - palmPos[phase0][2])) 
 
         elif whenBallTouchesGround >= phase0:
 
-            fitness = ((timeInQ1 * timeInQ2 * timeInQ3 * timeInQ4) / 10) + \
-                (timeInL1 * timeInL2) + (timeInR1 * timeInR2) + (timeInT1 * timeInT2)
+            print("phase 1")
+            palmContact = (timeInQ1 + timeInQ4) * (timeInQ3 + timeInQ2)
+            contactL = timeInL1 * timeInL2
+            contactR = timeInR1 * timeInR2
+            contactT = timeInT1 * timeInT2
+            joinedContact = 1 + (timeInL + timeInR) * timeInT
+            groundPenalty = timeTouchingGround * 10000
 
+            fitness = ((palmContact + contactL + contactR + 2.0 * contactT) * joinedContact) - timeTouchingGround
+
+        else:
+
+            print("broken function")
         # use pipe to send fitness to parent program
         connection.send(fitness)
         connection.close()

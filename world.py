@@ -33,6 +33,10 @@ class WORLD:
 
         return self.objects[1]
 
+    def Get_Floor_ID(self):
+
+        return self.planeId
+
     def Get_Ball_On_Ground_Values(self):
 
         return self.ballSensor.Get_Values()

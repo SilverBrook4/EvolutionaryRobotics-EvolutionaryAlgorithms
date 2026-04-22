@@ -36,6 +36,11 @@ class SIMULATION:
         self.world = WORLD(solutionID)
         self.robot = ROBOT(solutionID)
 
+        # starts simulation recording
+        if directOrGUI == "GUI":
+
+            self.logId = p.startStateLogging(p.STATE_LOGGING_VIDEO_MP4, "MostFitRobot.mp4")
+
 
     # class destructor
     def __del__(self):
@@ -57,7 +62,7 @@ class SIMULATION:
 
             # runs sensors in robots links and world
             worldSensorvalues = self.world.Sense(i)
-            robotSensorValues = self.robot.Sense(i, self.world.Get_Ball_ID())
+            robotSensorValues = self.robot.Sense(i, self.world.Get_Ball_ID(), self.world.Get_Floor_ID())
 
             # tells the robot to interpret sensor input with its neural network
             self.robot.Think(robotSensorValues + worldSensorvalues)
@@ -68,6 +73,10 @@ class SIMULATION:
             # slows simulation so it can be observed
             if (self.shouldSleep):
                 time.sleep(c.SIM_SLEEP)
+
+        if (self.shouldSleep == True):
+
+            p.stopStateLogging(self.logId)
 
 
     # evaluates the fitness of a specific robot
