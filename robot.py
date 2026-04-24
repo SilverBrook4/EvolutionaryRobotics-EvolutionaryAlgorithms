@@ -222,14 +222,19 @@ class ROBOT:
         timeInL1 = 0
         timeInL2 = 0
         timeInL = 0
+        contactL = False
 
         timeInR1 = 0
         timeInR2 = 0
         timeInR = 0
+        contactR = False
 
         timeInT1 = 0
         timeInT2 = 0
         timeInT = 0
+        contactT = False
+
+        fullContact = False
 
         whenBallTouchesGround = c.NUM_SIM_STEPS
         groundTouched = False
@@ -286,14 +291,29 @@ class ROBOT:
             if valuesL1[i] == 1.0 and valuesL2[i] == 1.0:
 
                 timeInL += 1
+                contactL = True
 
             if valuesR1[i] == 1.0 and valuesR2[i] == 1.0:
 
                 timeInR += 1
+                contactR = True
 
             if valuesT1[i] == 1.0 and valuesT2[i] == 1.0:
 
                 timeInT += 1
+                contactT = True
+
+            # checks if fingures touched all at once
+            if contactL and contactR and contactT:
+
+                fullContact = True
+
+            else:
+
+                contactL = False
+                contactR = False
+                contactT = False
+
 
             # gets timestep the ball touches the ground at
             if (ballOnGround[i] == 1.0) and not(groundTouched):
@@ -324,21 +344,32 @@ class ROBOT:
             stability = 1.0 / (1.0 + np.linalg.norm(np.array(palmPos[whenBallTouchesHand]) - np.array(palmPos[0])))
             proximity = (1.0 / (np.linalg.norm(np.array(palmPos) - np.array(ballPos)) + 1.0))
 
-            fitness = (stability * proximity) / timeTouchingGround
+            if groundTouched:
+
+                fitness = 0
+
+            else:
+
+                fitness = (stability * proximity) / timeTouchingGround
             #fitness = 100 / ((palmPos[whenBallTouchesGround][0] - ballPos[whenBallTouchesGround][0]) * (palmPos[whenBallTouchesGround][1] - ballPos[whenBallTouchesGround][1]) * (palmPos[whenBallTouchesGround][2] - ballPos[whenBallTouchesGround][2]) + 1)
             #fitness = 100 / (np.abs(palmPos[0][0] - palmPos[phase0][0]) * np.abs(palmPos[0][1] - palmPos[phase0][1]) * np.abs(palmPos[0][2] - palmPos[phase0][2])) 
 
-        elif whenBallTouchesGround >= phase0:
+        elif (whenBallTouchesGround >= phase0) and not(fullContact):
 
             print("phase 1")
-            palmContact = (timeInQ1 + timeInQ4) * (timeInQ3 + timeInQ2)
+            palmContact = (timeInQ1 * timeInQ4) * (timeInQ3 * timeInQ2)
             contactL = timeInL1 * timeInL2
             contactR = timeInR1 * timeInR2
             contactT = timeInT1 * timeInT2
-            joinedContact = 1 + (timeInL + timeInR) * timeInT
-            groundPenalty = timeTouchingGround * 10000
+            joinedContact = 1.0 + (timeInL + timeInR) * timeInT
+            groundPenalty = timeTouchingGround * 100
 
-            fitness = ((palmContact + contactL + contactR + 2.0 * contactT) * joinedContact) - timeTouchingGround
+            #fitness = (100.0 / (1.0 / ((palmContact + contactL + contactR + 2.0 * contactT) * joinedContact) + 1.0)) - timeTouchingGround
+            fitness = (100.0 / (1.0 / (1.0 + ((palmContact + contactL + contactR + contactL) * joinedContact)))) - timeTouchingGround
+
+        elif fullContact:
+
+            fitness = 10000000000000000000000000000000000
 
         else:
 

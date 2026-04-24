@@ -14,6 +14,7 @@ class SOLUTION:
         #TODO: modify to include hidden neurons
         self.weightsSH = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
         self.weightsHM = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
+        self.weightsR = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
 
         self.myID = myID
 
@@ -450,6 +451,12 @@ class SOLUTION:
 
                 pyrosim.Send_Synapse(sourceNeuronName = currentRow + c.NUM_SENSOR_NEURONS, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS + c.NUM_HIDDEN_NEURONS, weight=self.weightsHM[currentRow][currentColumn], type="regular")
 
+        for currentRow in range(c.NUM_HIDDEN_NEURONS):
+
+            for currentColumn in range(c.NUM_HIDDEN_NEURONS):
+
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow + c.NUM_SENSOR_NEURONS, targetNeuronName = currentColumn + c.NUM_SENSOR_NEURONS, weight=self.weightsR[currentRow][currentColumn], type="recurrent")
+
         '''
         # adds sensor neurons to neural network file
         pyrosim.Send_Sensor_Neuron(name = 0, linkName = "Torso")
@@ -510,7 +517,6 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain()
 
-        # TODO: write output to a file or supress
         # runs simulate.py
         self.process = Process(target=Run, args=(directOrGUI, self.myID, self.child_connection, c.SUPPRESS_PYBULLET_MESSAGES))
         self.process.start()
@@ -529,26 +535,36 @@ class SOLUTION:
 
     def Mutate(self):
 
-        neuronSet = random.random() < 0.5
+        neuronSet = random.randint(0, 2)
 
         if self.fitness > c.FITNESS_THRESHOLD:
 
-            if neuronSet:
+            if neuronSet == 0:
 
                 randomRow = random.randint(0, c.NUM_SENSOR_NEURONS - 1)
                 randomColumn = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
                 self.weightsSH[randomRow][randomColumn] = random.random() * 2 - 1
 
-            else:
+            elif neuronSet == 1:
 
                 randomRow = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
                 randomColumn = random.randint(0, c.NUM_MOTOR_NEURONS - 1)
                 self.weightsHM[randomRow][randomColumn] = random.random() * 2 - 1
 
+            elif neuronSet == 2:
+
+                randomRow = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
+                randomColumn = random.randint(0, c.NUM_HIDDEN_NEURONS - 1)
+                self.weightsR[randomRow][randomColumn] = random.random() * 2 - 1
+
+
         else:
 
             self.weightsSH = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
             self.weightsHM = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
+            self.weightsR = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
+
+
 
 
 
