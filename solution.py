@@ -248,12 +248,26 @@ class SOLUTION:
         pyrosim.Send_Cube(name="Q4", pos=[x, y, z], size=[length, width, height])
 
         # ----- Left Fingure -----
-        # joint Palm and LeftFingureBase
-        pyrosim.Send_Joint(name="Palm_LeftFingureBase", parent="Palm", child="LeftFingureBase", type="revolute", position=[0.4,0.2,0.1], jointAxis="0 1 0")
-        self.joints.append("Palm_LeftFingureBase")
+        # joint Palm and LeftRotator
+        pyrosim.Send_Joint(name="Palm_LeftRotator", parent="Palm", child="LeftRotator", type="revolute", position=[0.4,-0.2,0.1], jointAxis="0 0 1")
+        self.joints.append("Palm_LeftRotator")
+
+        # create LeftRotator
+        length = 0.01
+        width = 0.25
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="LeftRotator", pos=[x, y, z], size=[length, width, height])
+
+        pyrosim.Send_Joint(name="LeftRotator_LeftFingureBase", parent="LeftRotator", child="LeftFingureBase", type="revolute", position=[0.01,0.0,0.0], jointAxis="0 1 0")
+        self.joints.append("LeftRotator_LeftFingureBase")
 
         # create LeftFingureBase
-        length = 0.25
+        length = 0.24
         width = 0.25
         height = 0.1
 
@@ -276,7 +290,7 @@ class SOLUTION:
         pyrosim.Send_Cube(name="L1", pos=[x, y, z], size=[length, width, height])
 
         # joint LeftFingureBase and LeftFingureTip
-        pyrosim.Send_Joint(name="LeftFingureBase_LeftFingureTip", parent="LeftFingureBase", child="LeftFingureTip", type="revolute", position=[0.25,-0.05,0], jointAxis="0 1 0")
+        pyrosim.Send_Joint(name="LeftFingureBase_LeftFingureTip", parent="LeftFingureBase", child="LeftFingureTip", type="revolute", position=[0.24,-0.05,0], jointAxis="0 1 0")
         self.joints.append("LeftFingureBase_LeftFingureTip")
 
         # create LeftFingure
@@ -303,12 +317,26 @@ class SOLUTION:
         pyrosim.Send_Cube(name="L2", pos=[x, y, z], size=[length, width, height])
 
         # ----- Right Fingure -----
+        pyrosim.Send_Joint(name="Palm_RightRotator", parent="Palm", child="RightRotator", type="revolute", position=[0.4,0.2,0.1], jointAxis="0 0 1")
+        self.joints.append("Palm_RightRotator")
+
+        # create LeftRotator
+        length = 0.01
+        width = 0.25
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="RightRotator", pos=[x, y, z], size=[length, width, height])
+
         # joint Palm and LeftFingureBase
-        pyrosim.Send_Joint(name="Palm_RightFingureBase", parent="Palm", child="RightFingureBase", type="revolute", position=[0.4,-0.2,0.1], jointAxis="0 1 0")
-        self.joints.append("Palm_RightFingureBase")
+        pyrosim.Send_Joint(name="RightRotator_RightFingureBase", parent="RightRotator", child="RightFingureBase", type="revolute", position=[0.01,0.0,0.0], jointAxis="0 1 0")
+        self.joints.append("RightRotator_RightFingureBase")
 
         # create LeftFingureBase
-        length = 0.25
+        length = 0.24
         width = 0.25
         height = 0.1
 
@@ -332,7 +360,7 @@ class SOLUTION:
 
 
         # joint RightFingureBase and RightFingureTip
-        pyrosim.Send_Joint(name="RightFingureBase_RightFingureTip", parent="RightFingureBase", child="RightFingureTip", type="revolute", position=[0.25,0.05,0], jointAxis="0 1 0")
+        pyrosim.Send_Joint(name="RightFingureBase_RightFingureTip", parent="RightFingureBase", child="RightFingureTip", type="revolute", position=[0.24,0.05,0], jointAxis="0 1 0")
         self.joints.append("RightFingureBase_RightFingureTip")
 
         # create LeftFingure
@@ -359,12 +387,27 @@ class SOLUTION:
         pyrosim.Send_Cube(name="R2", pos=[x, y, z], size=[length, width, height])
 
         # ----- Thumb -----
+        pyrosim.Send_Joint(name="Palm_ThumbRotator", parent="Palm", child="ThumbRotator", type="revolute", position=[0.1,0,0.1], jointAxis="0 0 1")
+        self.joints.append("Palm_ThumbRotator")
+
+        # create LeftRotator
+        length = 0.01
+        width = 0.3
+        height = 0.1
+
+        x = length / 2
+        y = 0
+        z = -0.05
+
+        pyrosim.Send_Cube(name="ThumbRotator", pos=[x, y, z], size=[length, width, height])
+
+
         # joint Palm and Thumb Base
-        pyrosim.Send_Joint(name="Palm_ThumbBase", parent="Palm", child="ThumbBase", type="revolute", position=[0.1,0,0.1], jointAxis="0 1 0")
-        self.joints.append("Palm_ThumbBase")
+        pyrosim.Send_Joint(name="ThumbRotator_ThumbBase", parent="ThumbRotator", child="ThumbBase", type="revolute", position=[-0.01,0,0], jointAxis="0 1 0")
+        self.joints.append("ThumbRotator_ThumbBase")
 
         # create LeftFingureBase
-        length = 0.3
+        length = 0.29
         width = 0.3
         height = 0.1
 
@@ -387,7 +430,7 @@ class SOLUTION:
         pyrosim.Send_Cube(name="T1", pos=[x, y, z], size=[length, width, height])
 
         # joint LeftFingureBase and LeftFingureTip
-        pyrosim.Send_Joint(name="ThumbBase_ThumbTip", parent="ThumbBase", child="ThumbTip", type="revolute", position=[-0.3,0.,0], jointAxis="0 1 0")
+        pyrosim.Send_Joint(name="ThumbBase_ThumbTip", parent="ThumbBase", child="ThumbTip", type="revolute", position=[-0.29,0.,0], jointAxis="0 1 0")
         self.joints.append("ThumbBase_ThumbTip")
 
         # create LeftFingure

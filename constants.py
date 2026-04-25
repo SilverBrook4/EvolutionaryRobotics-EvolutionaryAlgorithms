@@ -9,7 +9,7 @@ POPULATION_SIZE = 15 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 500 # sets number of simulation steps
+NUM_SIM_STEPS = 750 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 
@@ -24,9 +24,9 @@ SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra 
 # Sets Neural Network Values
 NUM_SENSOR_NEURONS = 30 # number of sensor neurons
 
-NUM_HIDDEN_NEURONS = 5 # number of hidden neurons
+NUM_HIDDEN_NEURONS = 7 # number of hidden neurons
 
-NUM_MOTOR_NEURONS = 13 # number of motor neurons
+NUM_MOTOR_NEURONS = 16 # number of motor neurons
 
 FITNESS_THRESHOLD = 0.3
 
@@ -44,3 +44,7 @@ FREQUENCY = 10
 PHASE_OFFSET = 0
 
 MOTOR_JOINT_RANGE = np.pi / 2
+
+FINGURE_ROTATOR_JOINT_RANGE = np.pi / 6
+
+WRIST_SHIFT_JOINT_RANGE = np.pi / 6

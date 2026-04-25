@@ -150,7 +150,18 @@ class ROBOT:
 
         for jointName in pyrosim.jointNamesToIndices:
 
-            self.motors[jointName] = MOTOR(jointName)
+            joint = jointName.decode("UTF-8")
+            if joint == "Palm_LeftRotator" or joint == "Palm_RightRotator" or joint == "Palm_ThumbRotator":
+
+                self.motors[jointName] = MOTOR(jointName, c.FINGURE_ROTATOR_JOINT_RANGE)
+
+            elif joint == "Writst_Palm":
+
+                self.motors[jointName] = MOTOR(jointName, c.WRIST_SHIFT_JOINT_RANGE)
+
+            else:
+
+                self.motors[jointName] = MOTOR(jointName)
 
 
     # updates each motor
@@ -162,7 +173,8 @@ class ROBOT:
 
                 # gets motor neurons output value and correct motor
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
-                desiredAngle = self.nn.Get_Value_Of(neuronName) * c.MOTOR_JOINT_RANGE
+                jointRange = self.motors[jointName.encode()].Get_Joint_Range()
+                desiredAngle = self.nn.Get_Value_Of(neuronName) * jointRange
 
                 # updates motor neurons
                 self.motors[jointName.encode()].Set_Value(desiredAngle, self.robotId)
@@ -241,6 +253,9 @@ class ROBOT:
 
         timeTouchingGround = 1
 
+        negativeRotation = 0
+        positiveRotation = 0 
+
         for i in range(c.NUM_SIM_STEPS):
 
             # sums time spent in each hand quadrent
@@ -303,17 +318,6 @@ class ROBOT:
                 timeInT += 1
                 contactT = True
 
-            # checks if fingures touched all at once
-            if contactL and contactR and contactT:
-
-                fullContact = True
-
-            else:
-
-                contactL = False
-                contactR = False
-                contactT = False
-
 
             # gets timestep the ball touches the ground at
             if (ballOnGround[i] == 1.0) and not(groundTouched):
@@ -333,7 +337,81 @@ class ROBOT:
 
                     timeTouchingGround += 1
 
-        # TODO: Pelalize hand for touching ground
+            # TODO: count when joints are negativly rotated
+            if self.jointSensors["LeftRotator_LeftFingureBase".encode()].Get_Current_Value(i) < 0:
+
+                if touchedHand:
+
+                    negativeRotation += 1
+
+            else:
+
+                if touchedHand:
+
+                    positiveRotation += 1
+
+            if self.jointSensors["LeftFingureBase_LeftFingureTip".encode()].Get_Current_Value(i) < 0:
+
+                if touchedHand:
+
+                    negativeRotation += 1
+
+            else:
+
+               if touchedHand:
+
+                    positiveRotation += 1
+
+            if self.jointSensors["RightRotator_RightFingureBase".encode()].Get_Current_Value(i) < 0:
+
+                if touchedHand:
+
+                    negativeRotation += 1
+
+            else:
+
+               if touchedHand:
+
+                    positiveRotation += 1
+
+            if self.jointSensors["RightFingureBase_RightFingureTip".encode()].Get_Current_Value(i) < 0:
+
+                if touchedHand:
+
+                    negativeRotation += 1
+
+            else:
+
+               if touchedHand:
+
+                    positiveRotation += 1
+
+            if self.jointSensors["ThumbRotator_ThumbBase".encode()].Get_Current_Value(i) < 0:
+
+                if touchedHand:
+
+                    negativeRotation += 1
+
+            else:
+
+               if touchedHand:
+
+                    positiveRotation += 1
+
+            if self.jointSensors["ThumbBase_ThumbTip".encode()].Get_Current_Value(i) < 0:
+
+                if touchedHand:
+
+                    negativeRotation += 1
+
+            else:
+
+               if touchedHand:
+
+                    positiveRotation += 1
+
+        fullContact = contactL and contactR and contactT
+
 
         phase0 = whenBallTouchesHand
         phase1 = 0
@@ -341,7 +419,7 @@ class ROBOT:
         if whenBallTouchesGround < whenBallTouchesHand:
 
             print("phase 0")
-            stability = 1.0 / (1.0 + np.linalg.norm(np.array(palmPos[whenBallTouchesHand]) - np.array(palmPos[0])))
+            handStability = 1.0 / (1.0 + np.linalg.norm(np.array(palmPos[whenBallTouchesHand]) - np.array(palmPos[0])))
             proximity = (1.0 / (np.linalg.norm(np.array(palmPos) - np.array(ballPos)) + 1.0))
 
             if groundTouched:
@@ -350,7 +428,7 @@ class ROBOT:
 
             else:
 
-                fitness = (stability * proximity) / timeTouchingGround
+                fitness = (handStability * proximity) / timeTouchingGround
             #fitness = 100 / ((palmPos[whenBallTouchesGround][0] - ballPos[whenBallTouchesGround][0]) * (palmPos[whenBallTouchesGround][1] - ballPos[whenBallTouchesGround][1]) * (palmPos[whenBallTouchesGround][2] - ballPos[whenBallTouchesGround][2]) + 1)
             #fitness = 100 / (np.abs(palmPos[0][0] - palmPos[phase0][0]) * np.abs(palmPos[0][1] - palmPos[phase0][1]) * np.abs(palmPos[0][2] - palmPos[phase0][2])) 
 
@@ -362,10 +440,15 @@ class ROBOT:
             contactR = timeInR1 * timeInR2
             contactT = timeInT1 * timeInT2
             joinedContact = 1.0 + (timeInL + timeInR) * timeInT
-            groundPenalty = timeTouchingGround * 100
-
+            groundPenalty = 1.0 / (1.0 + timeTouchingGround * 5)
+            rotationPenalty = negativeRotation * 10000
+    
+            contactScore = (palmContact + contactL + contactR + contactT) * joinedContact
+            fitness = (100.0 / (1.0 / (1.0 + contactScore))) * groundPenalty
+            fitness += positiveRotation * 10
+            fitness -= rotationPenalty
             #fitness = (100.0 / (1.0 / ((palmContact + contactL + contactR + 2.0 * contactT) * joinedContact) + 1.0)) - timeTouchingGround
-            fitness = (100.0 / (1.0 / (1.0 + ((palmContact + contactL + contactR + contactL) * joinedContact)))) - timeTouchingGround
+            #fitness = (100.0 / (1.0 / (1.0 + ((palmContact + contactL + contactR + contactL) * joinedContact)))) - penalty
 
         elif fullContact:
 
