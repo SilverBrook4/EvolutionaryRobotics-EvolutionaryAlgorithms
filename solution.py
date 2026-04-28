@@ -11,7 +11,6 @@ class SOLUTION:
 
     def __init__(self, myID):
 
-        #TODO: modify to include hidden neurons
         self.weightsSH = np.random.rand(c.NUM_SENSOR_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1
         self.weightsHM = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_MOTOR_NEURONS) * 2 - 1
         self.weightsR = np.random.rand(c.NUM_HIDDEN_NEURONS, c.NUM_HIDDEN_NEURONS) * 2 - 1

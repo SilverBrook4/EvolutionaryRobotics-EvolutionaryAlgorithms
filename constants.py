@@ -8,9 +8,9 @@ TEST = os.environ.get("TEST")
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 5 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 50 # the number of generations that will be evolved
 
-POPULATION_SIZE = 5 # number of nn's in a population
+POPULATION_SIZE = 15 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
@@ -29,13 +29,19 @@ SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra 
 # Sets Neural Network Values
 if TEST == "A":
 
+    INCLUDE_JOINT_SENSORS = True
+
     NUM_SENSOR_NEURONS = 30 # number of sensor neurons
 
 elif TEST == "B":
 
-    NUM_SENSOR_NEURONS = 30 # number of sensor neurons
+    INCLUDE_JOINT_SENSORS = False
+
+    NUM_SENSOR_NEURONS = 14  # number of sensor neurons
 
 else:
+
+    INCLUDE_JOINT_SENSORS = True
 
     NUM_SENSOR_NEURONS = 30 # number of sensor neurons
 

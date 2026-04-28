@@ -98,7 +98,10 @@ class ROBOT:
         for sensor in self.jointSensors.values():
 
             sensor.Get_Joint_Angle(i, self.robotId)
-            currentSensorValues.append(sensor.Get_Current_Value(i))
+
+            if c.INCLUDE_JOINT_SENSORS:
+
+                currentSensorValues.append(sensor.Get_Current_Value(i))
 
         self.palmLocationSensor.Get_Link_Position(i, self.robotId)
         pos = self.palmLocationSensor.Get_Current_Value(i)
