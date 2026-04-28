@@ -223,6 +223,13 @@ class ROBOT:
         # gets locations of palm
         palmPos = self.palmLocationSensor.Get_Values()
 
+        fingureJoints = ["LeftRotator_LeftFingureBase".encode(),
+        "LeftFingureBase_LeftFingureTip".encode(),
+        "RightRotator_RightFingureBase".encode(),
+        "RightFingureBase_RightFingureTip".encode(),
+        "ThumbRotator_ThumbBase".encode(),
+        "ThumbBase_ThumbTip".encode()]
+
         timeInQ1 = 0
         timeInQ2 = 0
         timeInQ3 = 0
@@ -254,7 +261,11 @@ class ROBOT:
         timeTouchingGround = 1
 
         negativeRotation = 0
-        positiveRotation = 0 
+        positiveRotation = 0
+
+        preContactFingureMovement = 0
+
+        closingMotion = 0
 
         for i in range(c.NUM_SIM_STEPS):
 
@@ -331,12 +342,29 @@ class ROBOT:
                 whenBallTouchesHand = i
                 touchedHand = True
 
+            if touchedHand and i > whenBallTouchesHand:
+
+                for joint in fingureJoints:
+
+                    current = self.jointSensors[joint].Get_Current_Value(i)
+                    previous = self.jointSensors[joint].Get_Current_Value(i - 1)
+                    delta = current - previous
+
+                    if delta > 0:
+
+                        closingMotion += delta
+
+                    else:
+
+                        negativeRotation += 1
+
             for sensor in self.armToGroundSensors.values():
 
                 if sensor.Get_Current_Value(i) == 1.0:
 
                     timeTouchingGround += 1
 
+            '''
             # TODO: count when joints are negativly rotated
             if self.jointSensors["LeftRotator_LeftFingureBase".encode()].Get_Current_Value(i) < 0:
 
@@ -409,8 +437,17 @@ class ROBOT:
                if touchedHand:
 
                     positiveRotation += 1
+            '''
 
         fullContact = contactL and contactR and contactT
+
+        leftBaseShift = abs(self.jointSensors["LeftRotator_LeftFingureBase".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["LeftRotator_LeftFingureBase".encode()].Get_Current_Value(0))
+        leftTipShift = abs(self.jointSensors["LeftFingureBase_LeftFingureTip".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["LeftFingureBase_LeftFingureTip".encode()].Get_Current_Value(0))
+        rightBaseShift = abs(self.jointSensors["RightRotator_RightFingureBase".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["RightRotator_RightFingureBase".encode()].Get_Current_Value(0))
+        rightTipShift = abs(self.jointSensors["RightFingureBase_RightFingureTip".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["RightFingureBase_RightFingureTip".encode()].Get_Current_Value(0))
+        thumbBaseShift = abs(self.jointSensors["ThumbRotator_ThumbBase".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["ThumbRotator_ThumbBase".encode()].Get_Current_Value(0))
+        thumbTipShift = abs(self.jointSensors["ThumbBase_ThumbTip".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["ThumbBase_ThumbTip".encode()].Get_Current_Value(0))
+
 
 
         phase0 = whenBallTouchesHand
@@ -419,16 +456,12 @@ class ROBOT:
         if whenBallTouchesGround < whenBallTouchesHand:
 
             print("phase 0")
+            preContactShiftPenalty = (leftTipShift + leftBaseShift + rightBaseShift + rightTipShift + thumbBaseShift + thumbTipShift) * 0.01
             handStability = 1.0 / (1.0 + np.linalg.norm(np.array(palmPos[whenBallTouchesHand]) - np.array(palmPos[0])))
             proximity = (1.0 / (np.linalg.norm(np.array(palmPos) - np.array(ballPos)) + 1.0))
 
-            if groundTouched:
 
-                fitness = 0
-
-            else:
-
-                fitness = (handStability * proximity) / timeTouchingGround
+            fitness = (handStability * proximity) / timeTouchingGround - preContactShiftPenalty
             #fitness = 100 / ((palmPos[whenBallTouchesGround][0] - ballPos[whenBallTouchesGround][0]) * (palmPos[whenBallTouchesGround][1] - ballPos[whenBallTouchesGround][1]) * (palmPos[whenBallTouchesGround][2] - ballPos[whenBallTouchesGround][2]) + 1)
             #fitness = 100 / (np.abs(palmPos[0][0] - palmPos[phase0][0]) * np.abs(palmPos[0][1] - palmPos[phase0][1]) * np.abs(palmPos[0][2] - palmPos[phase0][2])) 
 
@@ -440,12 +473,12 @@ class ROBOT:
             contactR = timeInR1 * timeInR2
             contactT = timeInT1 * timeInT2
             joinedContact = 1.0 + (timeInL + timeInR) * timeInT
-            groundPenalty = 1.0 / (1.0 + timeTouchingGround * 5)
-            rotationPenalty = negativeRotation * 10000
+            groundPenalty = 1.0 / (1.0 + timeTouchingGround * 10)
+            rotationPenalty = negativeRotation * 1
     
             contactScore = (palmContact + contactL + contactR + contactT) * joinedContact
             fitness = (100.0 / (1.0 / (1.0 + contactScore))) * groundPenalty
-            fitness += positiveRotation * 10
+            fitness += closingMotion * 5000
             fitness -= rotationPenalty
             #fitness = (100.0 / (1.0 / ((palmContact + contactL + contactR + 2.0 * contactT) * joinedContact) + 1.0)) - timeTouchingGround
             #fitness = (100.0 / (1.0 / (1.0 + ((palmContact + contactL + contactR + contactL) * joinedContact)))) - penalty
