@@ -3,15 +3,17 @@ from multiprocessing import Process
 from search import Run
 import os
 
-NUM_TESTS_EACH = 2
+NUM_TESTS_EACH = 1
 
 if __name__ == "__main__":
 
     # run each test for amount of tests
     for i in range(NUM_TESTS_EACH):
 
+        os.environ["TESTNUMBER"] = str(i)
+
         # spawn A test
-        env = {**os.environ, "TEST" : "A"}
+        os.environ["TEST"] = "A"
 
         p = Process(target=Run)
 
@@ -19,7 +21,7 @@ if __name__ == "__main__":
         p.join()
 
         # spawn B test
-        env = {**os.environ, "TEST" : "B"}
+        os.environ["TEST"] = "B"
 
         p = Process(target=Run)
 

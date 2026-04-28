@@ -9,6 +9,8 @@ def Run():
 
     phc.Show_Best()
 
+    phc.Save_Data()
+
 if __name__ == "__main__":
 
     Run()

@@ -5,16 +5,18 @@ import os
 
 TEST = os.environ.get("TEST")
 
+TEST_NUMBER = os.environ.get("TESTNUMBER")
+
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 50 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 5 # the number of generations that will be evolved
 
-POPULATION_SIZE = 15 # number of nn's in a population
+POPULATION_SIZE = 2 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 750 # sets number of simulation steps
+NUM_SIM_STEPS = 500 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 
@@ -22,7 +24,7 @@ PYBULLET_DEBUGGER = False # Turns pybuller debugger on and off
 
 SHOW_NN_UPDATES = False # shows updates to neural network weights across steps
 
-SUPPRESS_PYBULLET_MESSAGES = True # supresses pybullet error messages and extra messages
+SUPPRESS_PYBULLET_MESSAGES = False # supresses pybullet error messages and extra messages
 
 #----------------------------------------------------
 
@@ -37,7 +39,7 @@ elif TEST == "B":
 
     INCLUDE_JOINT_SENSORS = False
 
-    NUM_SENSOR_NEURONS = 14  # number of sensor neurons
+    NUM_SENSOR_NEURONS = 13  # number of sensor neurons
 
 else:
 

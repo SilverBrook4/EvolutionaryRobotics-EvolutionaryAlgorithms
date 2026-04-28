@@ -2,6 +2,7 @@ from solution import SOLUTION
 import constants as c
 import copy
 import os
+import numpy as np
 
 class PARALLEL_HILL_CLIMBER:
 
@@ -18,6 +19,8 @@ class PARALLEL_HILL_CLIMBER:
         self.parents = {}
 
         self.nextAvailableID = 0
+
+        self.fitnessOverTime = []
 
 
         # creates a population of parents
@@ -92,6 +95,8 @@ class PARALLEL_HILL_CLIMBER:
     # selects most fit parent or child
     def Select(self):
 
+        fitness = -999999999.9999
+
         for key in range(c.POPULATION_SIZE):
 
             if (self.parents[key].fitness < self.children[key].fitness):
@@ -102,6 +107,18 @@ class PARALLEL_HILL_CLIMBER:
 
                 # makes deep copy
                 self.parents[key] = copy.deepcopy(self.children[key])
+
+                if self.parents[key].fitness > fitness:
+
+                    fitness = self.parents[key].fitness
+
+            else:
+
+                if self.parents[key].fitness > fitness:
+
+                    fitness = self.parents[key].fitness
+
+        self.fitnessOverTime.append(fitness)
 
 
     # prints parent and childs fitness
@@ -131,3 +148,17 @@ class PARALLEL_HILL_CLIMBER:
 
         print(f"Best Fitness Found: {self.parents[bestSolution].fitness}")
         self.parents[bestSolution].Start_Simulation("GUI")
+        self.parents[bestSolution].Wait_For_Simulation_To_End()
+
+
+    def Save_Data(self):
+
+        testType = c.TEST
+
+        testNumber = c.TEST_NUMBER
+
+        bestFitness = int(round(self.fitnessOverTime[-1]))
+
+        np.save(f"data//data_{testType}{testNumber}_{bestFitness}.npy", self.fitnessOverTime)
+
+
