@@ -10,13 +10,13 @@ TEST_NUMBER = os.environ.get("TESTNUMBER")
 #----------------------------------------------------
 
 # Set Evolution Values
-NUMBER_OF_GENERATIONS = 5 # the number of generations that will be evolved
+NUMBER_OF_GENERATIONS = 20 # the number of generations that will be evolved
 
-POPULATION_SIZE = 2 # number of nn's in a population
+POPULATION_SIZE = 15 # number of nn's in a population
 #----------------------------------------------------
 
 # Set Simulation Values
-NUM_SIM_STEPS = 500 # sets number of simulation steps
+NUM_SIM_STEPS = 750 # sets number of simulation steps
 
 SIM_SLEEP = 0.01 # time simulation sleeps
 
@@ -43,9 +43,9 @@ elif TEST == "B":
 
 else:
 
-    INCLUDE_JOINT_SENSORS = True
+    INCLUDE_JOINT_SENSORS = False
 
-    NUM_SENSOR_NEURONS = 30 # number of sensor neurons
+    NUM_SENSOR_NEURONS = 13 # number of sensor neurons
 
 NUM_HIDDEN_NEURONS = 7 # number of hidden neurons
 

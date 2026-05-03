@@ -161,4 +161,6 @@ class PARALLEL_HILL_CLIMBER:
 
         np.save(f"data//data_{testType}{testNumber}_{bestFitness}.npy", self.fitnessOverTime)
 
+        os.system(f"cp MostFitRobot.mp4 videos//robot_{testType}{testNumber}_{bestFitness}.npy")
+
 

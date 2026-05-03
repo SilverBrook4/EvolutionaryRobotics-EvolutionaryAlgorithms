@@ -270,6 +270,8 @@ class ROBOT:
 
         closingMotion = 0
 
+        timeBallSpendsOnGround = 0
+
         for i in range(c.NUM_SIM_STEPS):
 
             # sums time spent in each hand quadrent
@@ -339,13 +341,17 @@ class ROBOT:
                 whenBallTouchesGround = i
                 groundTouched = True
 
+            if ballOnGround[i] == 1.0:
+
+                timeBallSpendsOnGround += 1
+
             # gets timestep ball touches hand
             if not(touchedHand) and ((timeInQ1 + timeInQ2 + timeInQ3 + timeInQ4) > 0):
 
                 whenBallTouchesHand = i
                 touchedHand = True
 
-            if touchedHand and i > whenBallTouchesHand:
+            if touchedHand and i > whenBallTouchesHand and not(groundTouched):
 
                 for joint in fingureJoints:
 
@@ -451,7 +457,7 @@ class ROBOT:
         thumbBaseShift = abs(self.jointSensors["ThumbRotator_ThumbBase".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["ThumbRotator_ThumbBase".encode()].Get_Current_Value(0))
         thumbTipShift = abs(self.jointSensors["ThumbBase_ThumbTip".encode()].Get_Current_Value(whenBallTouchesHand) - self.jointSensors["ThumbBase_ThumbTip".encode()].Get_Current_Value(0))
 
-
+        # TODO: Corilate hand closure benifits to be given close to current contact
 
         phase0 = whenBallTouchesHand
         phase1 = 0
@@ -476,13 +482,15 @@ class ROBOT:
             contactR = timeInR1 * timeInR2
             contactT = timeInT1 * timeInT2
             joinedContact = 1.0 + (timeInL + timeInR) * timeInT
-            groundPenalty = 1.0 / (1.0 + timeTouchingGround * 10)
-            rotationPenalty = negativeRotation * 1
+            groundPenalty = 1.0 / (1.0 + timeTouchingGround * 100)
+            rotationPenalty = negativeRotation * 50
+            groundBallPenalty = timeBallSpendsOnGround * 50
     
             contactScore = (palmContact + contactL + contactR + contactT) * joinedContact
             fitness = (100.0 / (1.0 / (1.0 + contactScore))) * groundPenalty
             fitness += closingMotion * 5000
             fitness -= rotationPenalty
+            fitness -= groundBallPenalty
             #fitness = (100.0 / (1.0 / ((palmContact + contactL + contactR + 2.0 * contactT) * joinedContact) + 1.0)) - timeTouchingGround
             #fitness = (100.0 / (1.0 / (1.0 + ((palmContact + contactL + contactR + contactL) * joinedContact)))) - penalty
 
